@@ -1,0 +1,51 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.p12
+*.pfx
+id_rsa
+id_ed25519
+*service-account*.json
+*service_account*.json
+
+# JavaScript/TypeScript
+node_modules/
+dist/
+build/
+.next/
+coverage/
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+
+# Machine-specific
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log
+
+# Sensitive / large working data: sanitized test fixtures must be reviewed before whitelisting
+/data/
+/datasets/
+*.duckdb
+*.parquet
+*.sqlite
+*.sqlite3
+*.db
+*.xls
+*.xlsx
+*.xlsb
+*.csv
+*.zip
+
+data/
+**/data/
+marketing-tasks.json

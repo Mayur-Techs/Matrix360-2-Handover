@@ -1,0 +1,16 @@
+.venv
+venv
+ENV
+env
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache
+.mypy_cache
+.git
+.gitignore
+.env
+output/
+data/jobs.sqlite3
+tests/

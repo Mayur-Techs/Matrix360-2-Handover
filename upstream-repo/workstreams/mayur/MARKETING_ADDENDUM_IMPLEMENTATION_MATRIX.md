@@ -1,0 +1,9 @@
+# Matrix360 30 October Addendum Implementation Matrix
+
+| Addendum Capability | Priority | Implementation Location | Verification Evidence | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| **A. Dynamic B2B vs. B2C Affinity** | P0 | `workstreams/avinash/frontend/lib/m360-affinity-engine.js` | Test subtest 30 passed (1.2ms). Lakhotia NH6 industrial classified as `b2b_industrial`; Shree Heights & Vrindavan Greens classified as `b2c_affinity`. | **IMPLEMENTED & VERIFIED** |
+| **B. Canonical HandoverEnvelope & SSE** | P0 | `workstreams/avinash/frontend/lib/m360-marketing-orchestrator.js`, `api/marketing.js` | Test subtest 31 passed (84.4ms). Canonical envelope schema validated; 6-step progress pipeline (`accepted` -> `draft_ready`) emits events. | **IMPLEMENTED & VERIFIED** |
+| **C. Surgical Per-Channel Versions & Diff** | P0 | `workstreams/avinash/frontend/lib/m360-channel-versioner.js` | Test subtest 32 passed (3.9ms). Revising WhatsApp and LinkedIn increments ONLY those two ($v_1 \rightarrow v_2$), leaving all 8 other channels byte-for-byte identical. Line-by-line visual diff rendered. | **IMPLEMENTED & VERIFIED** |
+| **D. 3-Gate Readiness & Email-to-CTWA Bridge** | P0/P1 | `workstreams/avinash/frontend/lib/m360-channel-readiness.js` | Test subtest 33 passed (0.3ms). Gate 1 (editorial), Gate 2 (audience eligibility), Gate 3 (provider connection) evaluated independently. Compliant CTWA invitation generated for 18 unconsented contacts. | **IMPLEMENTED & VERIFIED** |
+| **E. Defensible Budget & A/B Sample Math** | P1 | `workstreams/avinash/frontend/lib/m360-budget-estimator.js` | Test subtest 34 passed (0.5ms). Diminishing returns curve $R(b) = R_{max} \cdot \frac{b}{b+k}$ computed with Low/Expected/High scenarios. Two-tailed MDE sample size formula and 14-day seasonality enforced. Badge: `ESTIMATE_ONLY_NOT_HISTORICAL_RESULT`. | **IMPLEMENTED & VERIFIED** |

@@ -1,0 +1,49 @@
+<USER_REQUEST>
+# MATRIX 360 — MASTER CATCH-UP, ZERO-FABRICATION & PRODUCTION HARDENING PROMPT FOR ANTIGRAVITY
+
+**Baseline State:** 181 / 181 tests passing in `workstreams/avinash/frontend/tests/`.  
+**Strict Rule:** Do NOT break or remove any of the 181 existing tests, existing route signatures, or existing UI elements. Every fix below must be additive, surgical, and verified with new automated tests.
+
+---
+
+## 1. EXECUTIVE OBJECTIVE
+
+A forensic line-by-line code audit and 50-user SaaS stress test of `workstreams/avinash/frontend/` revealed 8 specific production gaps, bugs, and fabrication layers that prevent real agency clients from using the platform end-to-end with live API keys. Execute all 8 fixes below cleanly and deterministically.
+
+---
+
+## 2. THE 8 SURGICAL FIXES TO IMPLEMENT
+
+### Fix 1: Eliminate All Fabricated `"status": "delivered"` Fallbacks (`lib/m360-email-provider.js` & `lib/m360-whatsapp-provider.js`)
+* **Current Defect:** When `SENDGRID_API_KEY` / `RESEND_API_KEY` or `WHATSAPP_API_TOKEN` is missing or throws an error, `m360-email-provider.js` and `m360-whatsapp-provider.js` catch the error and write `status: 'delivered'` (`live_dispatched: false` / `live_sent: false`) to the outbox JSON.
+* **Required Fix:**
+  1. In `lib/m360-email-provider.js`, if no live provider (`SendGrid`, `Resend`, or `Brevo SMTP`) succeeds, set `status: 'queued_sandbox_not_sent'` (never `'delivered'`) and `live_dispatched: false`.
+  2. In `lib/m360-whatsapp-provider.js`, when generating 1-Click WhatsApp deep links without a live Meta Cloud API `200 OK` response, set `status: 'deep_link_prepared_not_sent'` (never `'delivered'`) and `live_sent: false`. Only set `status: 'provider_accepted'` when `graph.facebook.com` returns a valid `messages[0].id`.
+
+### Fix 2: True Zero-Plaintext AES-256-GCM Vault Persistence & CTWA Phone Number Fix (`lib/m360-marketing-orchestrator.js`)
+* **Current Defect:**
+  1. `configureMarketingProvider()` stores `{ ...record, token }` (keeping the plaintext `token` in memory), n
+<truncated 9907 bytes>
+js`)
+
+Create `workstreams/avinash/frontend/tests/marketing-hardening-50personas.test.js` testing all 8 fixes above:
+1. Verify `m360-email-provider.js` and `m360-whatsapp-provider.js` never return `status: 'delivered'` when unconfigured or offline.
+2. Verify `WORKSPACE_PROVIDER_CREDENTIALS` stores zero plaintext tokens in memory, decrypts via `decryptSecret()`, persists to disk, and builds CTWA links using `display_phone_number`.
+3. Verify `MARKETING_ALLOWED_EMAILS=*` permits consented recipients, and `executeMarketingChannel('WhatsApp')` dispatches via the verified Meta Cloud API adapter with idempotency protection.
+4. Verify `switchPersonaMode()` preserves the full `marketing_pitch` schema, recalculates `budget_estimate`, and supports `recruitment_talent` (`TalentOS`) with strict purpose isolation.
+5. Verify `reviewAgentDeliverable({ decision: 'disagreed' })` blocks Gate 1 approval until a revision occurs.
+6. Verify authenticated `POST /api/marketing/handoff` attaches server-verified CRM leads and Content assets without returning `HTTP 501`.
+7. Verify `POST /api/marketing/webhooks/whatsapp` processes `STOP` opt-outs and CTWA inbound opt-in grants with HMAC signature verification.
+8. Run the full test suite (`npm test`) and confirm **100% pass rate (0 failures)** across all existing 181 tests plus the new hardening tests.
+
+/engageAll use ecc skills and plugins and agents all that, use all the mcps tolls skills agents that are ther used by us and without any bugs and errors all the things working as product for real users 
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-11-06T16:49:17+05:30.
+
+The user has mentioned some items in the form @[ITEM]. Here is extra information about the items that were mentioned by the user, in the order that they appear:
+
+/engageAll is a [Slash Command]:
+<SKILL>The user requested you read and use the "engageAll" skill. The path to the skill file is:
+C:\Users\MAYUR\.gemini\config\plugins\engage-all\skills\engageAll\SKILL.md</SKILL>
+</ADDITIONAL_METADATA>

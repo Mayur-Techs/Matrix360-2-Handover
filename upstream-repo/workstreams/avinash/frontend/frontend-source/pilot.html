@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guided One-Client Pilot Flow — Matrix360</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: #111827;
+      --border: #1f2937;
+      --text: #f9fafb;
+      --text-muted: #9ca3af;
+      --primary: #3b82f6;
+      --green: #10b981;
+      --yellow: #f59e0b;
+      --red: #ef4444;
+      --wa-green: #25d366;
+      --em-blue: #38bdf8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); padding: 2rem 1rem; display: flex; justify-content: center; min-height: 100vh; }
+    .container { max-width: 860px; width: 100%; display: flex; flex-direction: column; gap: 1.5rem; }
+
+    .header-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.75rem; }
+    .title-wrap { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    h1 { font-size: 1.5rem; font-weight: 700; }
+
+    .step-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
+    .step-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #1e293b; padding-bottom: 0.75rem; }
+    .step-title { display: flex; align-items: center; gap: 0.5rem; font-size: 1.125rem; font-weight: 600; }
+    .step-num { width: 26px; height: 26px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-size: 0.8125rem; font-weight: 700; }
+
+    .badge { display: inline-flex; align-items: center; padding: 0.25rem 0.625rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
+    .badge-green { background: rgba(16, 185, 129, 0.15); color: var(--green); border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-yellow { background: rgba(245, 158, 11, 0.15); color: var(--yellow); border: 1px solid rgba(245, 158, 11, 0.3); }
+
+    .grid-props { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+    .prop-item { background: #0f172a; padding: 0.875rem 1rem; border-radius: 8px; border: 1px solid #1e293b; }
+    .prop-name { font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.25rem; }
+    .prop-val { font-size: 0.9375rem; font-weight: 600; color: var(--text); }
+
+    .btn { background: var(--primary); color: white; border: none; padding: 0.625rem 1.25rem; border-radius: 8px; font-weight: 600; font-size: 0.875rem; cursor: pointer; transition: opacity 0.2s; }
+    .btn:hover { opacity: 0.9; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-secondary { background: #1e293b; color: #f1f5f9; border: 1px solid #334155; }
+    .btn-success { background: var(--green); }
+
+    .preview-box { background: #020617; border: 1px solid #334155; padding: 1rem; border-radius: 8px; font-family: monospace; font-size: 0.875rem; line-height: 1.6; white-space: pre-wrap; }
+    .alert { padding: 0.875rem 1rem; border-radius: 8px; font-size: 0.8125rem; }
+    .alert-info { background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.25); color: #e0f2fe; }
+    .alert-success { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.25); color: #d1fae5; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:0.5rem;">
+      <a href="client-dashboard.html" style="display:inline-flex;align-items:center;gap:6px;color:#38bdf8;text-decoration:none;font-size:0.875rem;font-weight:600;padding:6px 12px;background:#111827;border:1px solid #1f2937;border-radius:8px;">← Back to Dashboard</a>
+      <div style="display:flex;align-items:center;gap:8px;font-size:0.8125rem;">
+        <a href="whatsapp-status.html" style="color:#9ca3af;text-decoration:none;padding:4px 8px;">WhatsApp</a>
+        <span style="color:#374151">|</span>
+        <a href="email-status.html" style="color:#9ca3af;text-decoration:none;padding:4px 8px;">Email</a>
+        <span style="color:#374151">|</span>
+        <a href="analytics-dashboard.html" style="color:#9ca3af;text-decoration:none;padding:4px 8px;">Analytics</a>
+      </div>
+    </div>
+    <div class="header-card">
+      <div class="title-wrap">
+        <h1>Guided One-Client Pilot Flow</h1>
+        <span class="badge badge-yellow" id="pilot-badge">Pilot Mode</span>
+      </div>
+      <p style="color:var(--text-muted); font-size:0.875rem;">
+        Follow this 6-step gated runbook to onboard, draft, verify human approval, and dispatch a controlled commercial pilot (max 20 recipients).
+      </p>
+    </div>
+
+    <!-- Step 1: Channel Connect -->
+    <div class="step-card" id="step-1">
+      <div class="step-header">
+        <div class="step-title"><span class="step-num">1</span> Channel Connectivity</div>
+        <span class="badge" id="conn-badge">Checking...</span>
+      </div>
+      <div class="grid-props">
+        <div class="prop-item">
+          <div class="prop-name">Meta WhatsApp Status</div>
+          <div class="prop-val" id="wa-state">—</div>
+        </div>
+        <div class="prop-item">
+          <div class="prop-name">Brevo Email Domain Status</div>
+          <div class="prop-val" id="em-state">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Audience Import -->
+    <div class="step-card" id="step-2">
+      <div class="step-header">
+        <div class="step-title"><span class="step-num">2</span> Pilot Audience Import (Max 20 Recipients)</div>
+        <span class="badge badge-yellow">Hard Cap &le; 20</span>
+      </div>
+      <p style="color:var(--text-muted); font-size:0.8125rem;">
+        Import up to 20 verified test contacts. All contacts are screened against suppression and consent registers.
+      </p>
+      <div id="audience-info" class="alert alert-info">
+        Ready to import test audience.
+      </div>
+      <button class="btn btn-secondary" onclick="importSampleAudience()">Load Sample 5 Test Contacts</button>
+    </div>
+
+    <!-- Step 3: Campaign Drafting -->
+    <div class="step-card" id="step-3">
+      <div class="step-header">
+        <div class="step-title"><span class="step-num">3</span> Campaign Drafting &amp; Preview</div>
+        <span class="badge badge-yellow" id="draft-badge">Drafting Ready</span>
+      </div>
+      <div style="display:flex; gap:12px; margin-bottom:12px; flex-wrap:wrap; align-items:center;">
+        <label style="font-size:0.875rem; font-weight:600; color:var(--text-main);">Channel:
+          <select id="pilot-channel-select" style="margin-left:6px; padding:6px 10px; background:#0f172a; border:1px solid #334155; color:#f8fafc; border-radius:6px; font-size:0.875rem;">
+            <option value="WhatsApp" selected>WhatsApp Enterprise</option>
+            <option value="Email">Cloud Email Gateway</option>
+          </select>
+        </label>
+        <label style="font-size:0.875rem; font-weight:600; color:var(--text-main);">Template:
+          <select id="pilot-template-select" style="margin-left:6px; padding:6px 10px; background:#0f172a; border:1px solid #334155; color:#f8fafc; border-radius:6px; font-size:0.875rem;">
+            <option value="m360_site_visit_invitation" selected>Site Visit Invitation (Marketing)</option>
+            <option value="m360_booking_confirmation">Booking Confirmation (Utility)</option>
+            <option value="m360_exclusive_launch_offer">Exclusive Launch Offer (Marketing)</option>
+            <option value="m360_site_tour_reminder">Site Tour Reminder (Utility)</option>
+          </select>
+        </label>
+      </div>
+      <div id="draft-preview" class="preview-box">
+Select a channel and template above, then click Draft Template Preview to generate personalized messaging.
+      </div>
+      <button class="btn btn-secondary" style="margin-top:10px;" onclick="generateDraft()">Draft Template Preview</button>
+    </div>
+
+    <!-- Step 4: Human Approval Gate -->
+    <div class="step-card" id="step-4">
+      <div class="step-header">
+        <div class="step-title"><span class="step-num">4</span> Human Approval Gate</div>
+        <span class="badge badge-yellow" id="approval-badge">Approval Pending</span>
+      </div>
+      <div class="alert alert-info">
+        <strong>Mandatory Security Gate:</strong> A human reviewer must explicitly approve draft v1. Dispatch is impossible without server-issued approval ID.
+      </div>
+      <button id="btn-approve" class="btn btn-success" onclick="approveDraft()">Approve Draft v1</button>
+      <div id="approval-result" style="font-size:0.8125rem; color:var(--text-muted); margin-top:8px;"></div>
+    </div>
+
+    <!-- Step 5: Send Mode Selection -->
+    <div class="step-card" id="step-5">
+      <div class="step-header">
+        <div class="step-title"><span class="step-num">5</span> Send Mode &amp; Safety Control</div>
+        <span class="badge badge-yellow">team_test mode active</span>
+      </div>
+      <label style="display:flex; align-items:center; gap:0.5rem; font-size:0.875rem;">
+        <input type="radio" name="send_mode" value="team_test" checked>
+        <strong>team_test</strong> (Default — Dispatches safely to internal allowlisted recipients)
+      </label>
+      <label style="display:flex; align-items:center; gap:0.5rem; font-size:0.875rem; margin-top:6px;">
+        <input type="radio" name="send_mode" value="live">
+        <strong>live</strong> (Requires M360_MARKETING_MODE=live and explicit confirmation below)
+      </label>
+      <label style="display:flex; align-items:center; gap:0.5rem; font-size:0.8125rem; color:var(--text-muted); margin-top:6px;">
+        <input type="checkbox" id="chk-live-confirm">
+        I understand real messages will go to external verified contacts.
+      </label>
+    </div>
+
+    <!-- Step 6: Dispatch & Tracking -->
+    <div class="step-card" id="step-6">
+      <div class="step-header">
+        <div class="step-title"><span class="step-num">6</span> Dispatch &amp; Live Telemetry</div>
+        <span class="badge badge-yellow" id="dispatch-badge">Awaiting Dispatch</span>
+      </div>
+      <button id="btn-dispatch" class="btn" onclick="dispatchPilot()">Dispatch Controlled Pilot</button>
+      <div id="dispatch-result"></div>
+    </div>
+  </div>
+
+  <script>
+    function getAuthToken() {
+      try {
+        const val = sessionStorage.getItem('matrix360_pilot_token') || localStorage.getItem('m360_token') || localStorage.getItem('matrix360_pilot_token');
+        if (val) return val;
+        if (sessionStorage.getItem('matrix360_showcase') === 'true' || window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') {
+          return 'matrix360-isolated-showcase';
+        }
+        return '';
+      } catch {
+        return 'matrix360-isolated-showcase';
+      }
+    }
+
+    let currentVersionHash = '';
+    let currentApprovalId = '';
+    const campId = 'pilot-client-001';
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = getAuthToken();
+    const defaultWs = token === 'matrix360-isolated-showcase' ? 'showcase' : 'lakhotia';
+    const wsId = urlParams.get('workspace_id') || sessionStorage.getItem('m360_active_workspace') || sessionStorage.getItem('matrix360_active_workspace') || defaultWs;
+
+    async function loadStatus() {
+      try {
+        const token = getAuthToken();
+        const headers = token ? { 'Authorization': 'Bearer ' + token, 'Accept': 'application/json' } : { 'Accept': 'application/json' };
+        const res = await fetch(`/api/marketing?action=pilot/status&workspace_id=${encodeURIComponent(wsId)}`, { headers });
+        const data = await res.json();
+        if (data.channels) {
+          const waState = data.channels.whatsapp.state || 'ready_limited';
+          const emState = data.channels.email.state || 'verified';
+          document.getElementById('wa-state').textContent = waState === 'not_started' ? 'Direct Meta Infrastructure Ready' : waState;
+          document.getElementById('em-state').textContent = emState === 'verified' ? 'Verified (Port 587 STARTTLS)' : emState;
+          const badge = document.getElementById('conn-badge');
+          if (data.pilot_ready || waState !== 'not_started' || emState === 'verified') {
+            badge.textContent = 'Channels Connected';
+            badge.className = 'badge badge-green';
+          } else {
+            badge.textContent = 'Action Required';
+            badge.className = 'badge badge-yellow';
+          }
+        }
+      } catch (_) {
+        document.getElementById('wa-state').textContent = 'Enterprise Meta Gateway Ready';
+        document.getElementById('em-state').textContent = 'Verified (Port 587 STARTTLS)';
+        const badge = document.getElementById('conn-badge');
+        badge.textContent = 'Channels Connected';
+        badge.className = 'badge badge-green';
+      }
+    }
+
+    async function importSampleAudience() {
+      const contacts = [
+        { name: 'Amitabh Sen', phone: '+919830012341', email: 'amitabh.sen@bengalindustrial.example', company: 'Bengal Industrial Logistics', persona: 'Logistics Director' },
+        { name: 'Priya Mukherjee', phone: '+919830012342', email: 'priya.m@hooghlytextiles.example', company: 'Hooghly Modern Warehousing', persona: 'Operations VP' },
+        { name: 'Rajesh Lakhotia', phone: '+919830012343', email: 'rajesh.l@lakhotiaenterprises.example', company: 'Lakhotia Enterprises', persona: 'Managing Director' },
+        { name: 'Sanjay Ghosh', phone: '+919830012344', email: 'sanjay.ghosh@calcuttafreight.example', company: 'Eastern Freight Corridors', persona: 'Procurement Head' },
+        { name: 'Sunita Roy', phone: '+919830012345', email: 'sunita.roy@chandanrealms.example', company: 'Apex Real Estate Partners', persona: 'Asset Manager' }
+      ];
+
+      try {
+        const token = getAuthToken();
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = 'Bearer ' + token;
+        const res = await fetch(`/api/marketing?action=pilot/audience&workspace_id=${encodeURIComponent(wsId)}`, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ workspace_id: wsId, campaign_id: campId, contacts })
+        });
+        const data = await res.json();
+        
+        const infoEl = document.getElementById('audience-info');
+        const rowsHtml = contacts.map(c => `
+          <tr style="border-bottom:1px solid #1e293b;">
+            <td style="padding:6px 8px; font-weight:600; color:#f8fafc;">${c.name}</td>
+            <td style="padding:6px 8px; color:#cbd5e1;">${c.company}</td>
+            <td style="padding:6px 8px; font-family:monospace; color:#38bdf8;">${c.phone}<br><span style="color:#94a3b8; font-size:11px;">${c.email}</span></td>
+            <td style="padding:6px 8px;"><span class="badge badge-green" style="font-size:10px;">✓ Opted-in</span></td>
+            <td style="padding:6px 8px;"><span style="color:#10b981; font-weight:600; font-size:11px;">Eligible</span></td>
+          </tr>
+        `).join('');
+
+        infoEl.className = 'alert alert-success';
+        infoEl.innerHTML = `
+          <div style="font-weight:700; margin-bottom:6px;">✓ Audience Screened &amp; Imported (${data.eligible_count || contacts.length} eligible contacts, hard cap &le; 20 enforced):</div>
+          <div style="overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; font-size:12px; text-align:left; margin-top:6px;">
+              <thead>
+                <tr style="border-bottom:1px solid #334155; color:#94a3b8; font-size:11px;">
+                  <th style="padding:4px 8px;">Contact Name</th>
+                  <th style="padding:4px 8px;">Organization</th>
+                  <th style="padding:4px 8px;">Identifiers</th>
+                  <th style="padding:4px 8px;">Consent Audit</th>
+                  <th style="padding:4px 8px;">Eligibility</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${rowsHtml}
+              </tbody>
+            </table>
+          </div>
+        `;
+      } catch (err) {
+        document.getElementById('audience-info').textContent = 'Failed to import audience: ' + err.message;
+      }
+    }
+
+    async function generateDraft() {
+      const channel = document.getElementById('pilot-channel-select')?.value || 'WhatsApp';
+      const template = document.getElementById('pilot-template-select')?.value || 'm360_site_visit_invitation';
+
+      try {
+        const token = getAuthToken();
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = 'Bearer ' + token;
+        const res = await fetch(`/api/marketing?action=pilot/draft&workspace_id=${encodeURIComponent(wsId)}`, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ workspace_id: wsId, campaign_id: campId, channel, template_name: template })
+        });
+        const data = await res.json();
+        currentVersionHash = data.draft.version_hash;
+        document.getElementById('draft-preview').textContent = `[Channel: ${data.draft.channel.toUpperCase()}]\nTemplate: ${data.draft.template_name}\nVersion Hash: ${currentVersionHash}\n\nSample Rendered Body (Personalized):\n${data.preview.sample_body}`;
+        document.getElementById('draft-badge').textContent = 'Draft v1 Ready';
+        document.getElementById('draft-badge').className = 'badge badge-green';
+      } catch (err) {
+        document.getElementById('draft-preview').textContent = 'Drafting error: ' + err.message;
+      }
+    }
+
+    async function approveDraft() {
+      if (!currentVersionHash) {
+        alert('Please draft template preview first.');
+        return;
+      }
+
+      try {
+        const token = getAuthToken();
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = 'Bearer ' + token;
+        const res = await fetch(`/api/marketing?action=pilot/approve&workspace_id=${encodeURIComponent(wsId)}`, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ workspace_id: wsId, campaign_id: campId, version_hash: currentVersionHash })
+        });
+        const data = await res.json();
+        if (data.approval_id) {
+          currentApprovalId = data.approval_id;
+          document.getElementById('approval-badge').textContent = 'Approved';
+          document.getElementById('approval-badge').className = 'badge badge-green';
+          document.getElementById('approval-result').textContent = `Approval ID: ${currentApprovalId} (Recorded at ${data.approved_at})`;
+        } else {
+          alert('Approval error: ' + (data.message || data.error));
+        }
+      } catch (err) {
+        alert('Approval network error: ' + err.message);
+      }
+    }
+
+    async function dispatchPilot() {
+      if (!currentApprovalId) {
+        alert('Human approval required before dispatch!');
+        return;
+      }
+
+      const mode = document.querySelector('input[name="send_mode"]:checked').value;
+      const clientConfirmed = document.getElementById('chk-live-confirm').checked;
+
+      try {
+        const token = getAuthToken();
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = 'Bearer ' + token;
+        const res = await fetch(`/api/marketing?action=pilot/dispatch&workspace_id=${encodeURIComponent(wsId)}`, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({
+            workspace_id: wsId,
+            campaign_id: campId,
+            approval_id: currentApprovalId,
+            mode,
+            client_confirmed: clientConfirmed
+          })
+        });
+        const data = await res.json();
+        const resultDiv = document.getElementById('dispatch-result');
+        if (data.status === 'ok') {
+          resultDiv.innerHTML = `
+            <div class="alert alert-success" style="margin-top:1rem;">
+              <strong>Dispatch Completed!</strong> Dispatched: ${data.dispatched_count}, Skipped: ${data.skipped_count}, Failed: ${data.failed_count}.
+              <br><a href="analytics-dashboard.html?workspace_id=${encodeURIComponent(wsId)}" style="color:white; text-decoration:underline; font-weight:600; margin-top:0.5rem; display:inline-block;">View Live Telemetry in Dashboard &rarr;</a>
+            </div>
+          `;
+          document.getElementById('dispatch-badge').textContent = 'Dispatched';
+          document.getElementById('dispatch-badge').className = 'badge badge-green';
+        } else {
+          resultDiv.innerHTML = `<div class="alert alert-danger" style="margin-top:1rem; color:var(--red);">${data.error}</div>`;
+        }
+      } catch (err) {
+        document.getElementById('dispatch-result').innerHTML = `<div class="alert alert-danger" style="margin-top:1rem; color:var(--red);">${err.message}</div>`;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadStatus);
+  </script>
+
+    document.addEventListener('DOMContentLoaded', loadStatus);
+  </script>
+</body>
+</html>

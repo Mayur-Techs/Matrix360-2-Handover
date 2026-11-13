@@ -1,0 +1,47 @@
+name: "Tanmayi | Workstream hygiene (not app tests)"
+
+on:
+  push:
+    branches: ["work/tanmayi"]
+    paths:
+      - "workstreams/tanmayi/**"
+      - ".github/workflows/tanmayi.yml"
+  pull_request:
+    paths:
+      - "workstreams/tanmayi/**"
+      - ".github/workflows/tanmayi.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: "tanmayi-${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  repository-hygiene:
+    name: "Directory and filename checks ONLY"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source (read only)
+        uses: actions/checkout@v4
+      - name: Check workstream directory
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f "workstreams/tanmayi/README.md"
+      - name: Reject tracked sensitive filenames in this workstream
+        shell: bash
+        run: |
+          set -euo pipefail
+          suspect="$(git ls-files -- 'workstreams/tanmayi/' | grep -Ei '(^|/)(\.env($|\.)|id_rsa$|id_ed25519$|.*\.(pem|p12|pfx)$|.*service[-_]?account.*\.json$)' || true)"
+          if [[ -n "$suspect" ]]; then
+            echo "::error::Suspected secret files tracked in workstream tanmayi. Remove them from git and rotate any exposed credentials."
+            printf '%s\n' "$suspect"
+            exit 1
+          fi
+      - name: Explain the check coverage
+        run: |
+          echo "Passed filename and scaffold checks only for Tanmayi."
+          echo "Application builds, unit tests, and deployment checks are NOT configured."

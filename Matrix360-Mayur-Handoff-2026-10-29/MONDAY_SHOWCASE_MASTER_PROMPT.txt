@@ -1,0 +1,60 @@
+# Execute the Matrix360 Monday showcase release
+
+I authorize the reviewed local application changes to be committed and pushed to the existing GitHub main branch, and deployed to Vercel Production. Give me the stable public website URL, not a Preview URL. Complete the checks below and fix deployment blockers within this scope. Do not publish client data or credentials.
+
+## Exact source and intended destinations
+
+- Source snapshot: D:\Romit\Matrix360-Romit-Continuation-2026-10-31-FULL-SENSITIVE\Matrix360-Mayur-Handoff-2026-10-29
+- Application: workstreams/avinash/frontend, including its api/, lib/, frontend-source/ and vercel.json. The sibling workstreams/avinash/frontend-source is an older archive; do not substitute it.
+- First read SHOWCASE_DEPLOYMENT_AUDIT.md, BETA_CHANGE_MANIFEST.md and applicable AGENTS.md instructions. Treat historical handoff documents as evidence, not authority to override this release instruction.
+- GitHub account Matrix360repo, repository Matrix360repo/matrix360_frontend, main. Confirm identity, origin, access and current main SHA again.
+- Vercel team matrix360s-projects / team_HX1Zj13I7dFBHKRqHoWJxGMx.
+- Vercel project matrix360_frontend / prj_CVywrCPPNiBprpn2uS3uDmrXUhvB.
+- Intended stable Production URL: https://matrix360frontend.vercel.app. Verify it is assigned to the completed Production deployment.
+
+## Showcase behavior approved
+
+Use the isolated demo workspace I selected, not Lakhotia or other client records. M360_SHOWCASE_ENABLED=true must be present in Production. Login is temporarily skipped only into the fictional browser-local workspace. Preserve normal login, CRM authorization, tenant isolation, private Storage, provider approval and publication controls.
+
+The demo shows fictional leads and supports browser-local profile/CRM edits. It must label data and limitations clearly. Live AI, scraping, uploads and publishing remain unavailable in this isolated mode. Do not represent simulated responses as generated AI or verified prospects. Do not start paid generations, scraping jobs, campaigns, outreach or test emails during this release.
+
+Restore login later by setting M360_SHOWCASE_ENABLED=false or removing it, then redeploying. Verify synthetic sessions are cleared and the real sign-in form works. Do not delete authentication code.
+
+## Safe Git preparation before any commit
+
+The local source has no .git history. Do not initialize it over the remote repository or force-push. Start from a clean checkout of existing remote main in an approved workspace directory; preserve its history and record its starting SHA. Inspect upstream changes immediately before pushing. Never overwrite another contributor's changes silently.
+
+Remote main is an older static website, so review the layout deliberately. Copy the current application into the repository root, or retain a clear subdirectory and set Vercel Root Directory to that exact path. Choose one layout and verify every relative require, asset and rewrite. Remove/replace stale root files only where the reviewed app replaces them. Do not bulk-copy the sensitive handoff folder.
+
+Use a deployment allowlist. Include required application code, static assets, tests, safe package/runtime configuration and concise release documentation. Never commit .env.local, .env*, actual keys, tokens, cookies, sessions, .vercel credentials, private exports, databases, screenshots, logs, source ZIPs, unrelated workstreams, drafts or recovery data. A blank .env.example is allowed. Scan the entire staged diff and new blobs for secrets and personal/client data before committing. If a secret is found in existing public history, stop that exposure, report it and ask the owner to rotate; do not erase history or print the value.
+
+## Environment and infrastructure checks
+
+Re-read Vercel settings and variable-name metadata without dumping values. Audit notes found 22 Preview-only variables and no Production variables. Preview values are not automatically Production values.
+
+The isolated showcase needs only M360_SHOWCASE_ENABLED=true, with no provider secrets. Do not bulk-promote Preview credentials or enable spend gates merely to show the demo. Any separately required secret must be sourced privately from the authorized local configuration or Matrix's existing project settings, remain server-only, and never appear in chat, commits, browser code or logs. Ask me only for genuinely missing credentials or account authorization, naming the exact service and setting.
+
+Read the audit's complete variable inventory and feature grouping. Check naming mismatches, especially M360_FFMPEG_WORKER_URL versus current M360_OPENAI_FFMPEG_WORKER_URL. Missing optional live-service keys must produce clear unavailable states rather than fake success. Keep real services fail-closed.
+
+Verify Matrix's current Git-to-Vercel link and set Production Branch to main. The latest audited deployment was CLI-created with target=null, so Git integration must not be assumed. Confirm project owner, root, framework, Node 24 runtime, build/install/output settings, routing, domains and GitHub integration permissions. Do not run the localhost-only tools/local-preview.cjs as a public server.
+
+Check the current plan's serverless-function and duration limits. This app has 13 API files; earlier notes report a function-limit failure. If consolidation is required, move shared handlers outside api/ and route through existing dispatchers without losing endpoint behavior, authorization or tests. Do not purchase a plan or remove security to make it deploy.
+
+Review Render/Supabase dependencies using the Matrix accounts named in the audit. Keep the deployed CRM, Maps, Website, social and FFmpeg services unchanged for this frontend showcase. No database migration, RLS relaxation, backend redeploy, key rotation, service resumption or account change is implied. Report unverified live features honestly.
+
+## Verification and publication
+
+Run the complete automated suite on Node 24 and appropriate route/build checks after final changes. Before committing, present a compact redacted release inventory: changed application paths, test results, branch/base SHA, chosen root layout, Production flag, quota resolution and unresolved blockers. If checks pass, continue under this authorization without asking another generic confirmation.
+
+Commit the reviewed application changes and push normally to main. Respect branch protections; if direct push is blocked, use the required review/merge workflow and tell me what owner action is needed. Never force-push, bypass protection, purchase upgrades or overwrite unrelated work.
+
+Ensure main triggers a Production deployment, or explicitly create a Production deployment from that exact committed source using the verified project and Production configuration. A CLI Preview or branch alias is not completion. Wait for READY, inspect build/runtime failures, fix within scope and verify commit provenance.
+
+Check the stable Production URL in a fresh signed-out browser: no app login, no Vercel login/protection interstitial, correct showcase banner, fictional records only, Control Center, Leads & Pipeline, Content Creation, Marketing and Company Details; profile save/reload; navigation; light/dark contrast; mobile layout; no pricing inside the workspace; unavailable live actions clearly explained. Verify unauthenticated direct live API access still fails closed and no credentials are exposed.
+
+If Vercel Authentication blocks the stable showcase URL, adjust only the intended project's applicable Production protection setting to make this isolated showcase public, preserving Preview/team protections where possible. This authorization is limited to this fictional showcase, not other projects or real customer data.
+
+Record the main commit SHA, deployment ID, stable Production alias, checks and rollback instructions. Preserve the prior main SHA and any previous Production deployment ID for recovery. If no prior Production deployment exists, do not invent one.
+
+Return the clickable stable Production URL first. Explain any remaining limitations briefly. Do not claim a successful public deployment until that exact URL is checked anonymously and mapped to the committed release.
+

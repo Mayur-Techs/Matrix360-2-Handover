@@ -1,0 +1,108 @@
+<USER_REQUEST>
+# MATRIX 360 — MASTER CATCH-UP, ZERO-FABRICATION & PRODUCTION HARDENING PROMPT FOR ANTIGRAVITY
+
+**Baseline State:** 181 / 181 tests passing in `workstreams/avinash/frontend/tests/`.  
+**Strict Rule:** Do NOT break or remove any of the 181 existing tests, existing route signatures, or existing UI elements. Every fix below must be additive, surgical, and verified with new automated tests.
+
+---
+
+## 1. EXECUTIVE OBJECTIVE
+
+A forensic line-by-line code audit and 50-user SaaS stress test of `workstreams/avinash/frontend/` revealed 8 specific production gaps, bugs, and fabrication layers that prevent real agency clients from using the platform end-to-end with live API keys. Execute all 8 fixes below cleanly and deterministically.
+
+---
+
+## 2. THE 8 SURGICAL FIXES TO IMPLEMENT
+
+### Fix 1: Eliminate All Fabricated `"status": "delivered"` Fallbacks (`lib/m360-email-provider.js` & `lib/m360-whatsapp-provider.js`)
+* **Current Defect:** When `SENDGRID_API_KEY` / `RESEND_API_KEY` or `WHATSAPP_API_TOKEN` is missing or throws an error, `m360-email-provider.js` and `m360-whatsapp-provider.js` catch the error and write `status: 'delivered'` (`live_dispatched: false` / `live_sent: false`) to the outbox JSON.
+* **Required Fix:**
+  1. In `lib/m360-email-provider.js`, if no live provider (`SendGrid`, `Resend`, or `Brevo SMTP`) succeeds, set `status: 'queued_sandbox_not_sent'` (never `'delivered'`) and `live_dispatched: false`.
+  2. In `lib/m360-whatsapp-provider.js`, when generating 1-Click WhatsApp deep links without a live Meta Cloud API `200 OK` response, set `status: 'deep_link_prepared_not_sent'` (never `'delivered'`) and `live_sent: false`. Only set `status: 'provider_accepted'` when `graph.facebook.com` returns a valid `messages[0].id`.
+
+### Fix 2: True Zero-Plaintext AES-256-GCM Vault Persistence & CTWA Phone Number Fix (`lib/m360-marketing-orchestrator.js`)
+* **Current Defect:**
+  1. `configureMarketingProvider()` stores `{ ...record, token }` (keeping the plaintext `token` in memory), never calls `decryptSecret()`, and loses all configured credentials when the server restarts because `WORKSPACE_PROVIDER_CREDENTIALS` is not saved in `saveTasksToDisk()` or `m360-marketing-durable-store.js`.
+  2. `configureMarketingProvider()` passes `whatsappNumber: phoneNumberId` (Meta's internal numeric asset ID) to `createEmailToCTWABridgeDraft()` instead of the actual business phone number (`display_phone_number`), producing broken `wa.me` links.
+* **Required Fix:**
+  1. Do NOT store plaintext `token` inside `WORKSPACE_PROVIDER_CREDENTIALS`. Store only `encryptedToken` (`iv:tag:ciphertext`) and call `decryptSecret(stored.encryptedToken, workspaceId)` inside `verifyMarketingProvider()` and `executeMarketingChannel()`.
+  2. Persist `WORKSPACE_PROVIDER_CREDENTIALS` (containing only encrypted tokens and metadata) inside `saveTasksToDisk()` / `loadTasksFromDisk()` AND via `durableStore.saveProviderConnection()` (`public.provider_connections` table).
+  3. In `api/marketing.js` (`action === 'providers/configure'`), after `verifyMarketingProvider('whatsapp')` returns `display_phone_number`, store `displayPhoneNumber` in the vault record and regenerate `task.email_to_ctwa_bridge` using the verified `display_phone_number` (or `credentials.business_phone`) rather than `phoneNumberId`.
+  4. In `verifyMarketingProvider('whatsapp')`, only allow the `M360_KEYLESS_TEST_MODE` catch-block fallback when `process.env.NODE_ENV !== 'production'` and `process.env.VERCEL_ENV !== 'production'`.
+
+### Fix 3: Wire Live WhatsApp Cloud API, Meta & LinkedIn Execution + Fix the `MARKETING_ALLOWED_EMAILS=*` Bug (`lib/m360-marketing-orchestrator.js`)
+* **Current Defect:**
+  1. In `executeMarketingChannel()`, line 628 has an inverted boolean condition: `(!allowed.has('*') && !recipients.some(contact => !allowed.has(...)))`. If an admin sets `MARKETING_ALLOWED_EMAILS=*` in production, `!allowed.has('*')` is `false`, blocking all live emails!
+  2. Right after the `if (channel === 'Email' && options.mode === 'live')` block, `executeMarketingChannel()` unconditionally throws `PROVIDER_ADAPTER_NOT_IMPLEMENTED` for `WhatsApp`, even when the workspace has a verified Meta Cloud API token in the vault and all 3 gates pass!
+* **Required Fix:**
+  1. Fix the allowlist check in `executeMarketingChannel()` to:
+     `const emailAllowed = (options.privateRecipient === true && controlledShowcaseEmail && recipients.length === 1) || (allowed.has('*') ? true : recipients.every(contact => allowed.has(String(contact.email).toLowerCase())));`
+  2. Add the `if (channel === 'WhatsApp' && options.mode === 'live')` execution branch in `executeMarketingChannel()`:
+     - Require `process.env.MARKETING_LIVE_SEND_ENABLED === 'true'`, `options.operatorApproved === true`, and `options.approvalPhrase === 'SEND_APPROVED_WHATSAPP_CAMPAIGN'`.
+     - Block synthetic/test audiences (`SYNTHETIC_OUTBOUND_BLOCKED`).
+     - Filter `task.audience_snapshot.contacts` strictly for contacts with a valid phone number, `whatsapp_opt_in_status === 'granted'`, `consent_evidence?.whatsapp === true`, and `suppressed !== true`.
+     - Decrypt the workspace's WhatsApp token via `decryptSecret()` and dispatch via `createWhatsAppAdapter()` (from `lib/m360-provider-adapters.js`) with per-recipient `idempotencyKey = "${task.correlation_id}:whatsapp:${draft.version_hash}:${contact.id || contact.phone}"`, recording `status: 'provider_accepted'` and `provider_message_ids` in `task.execution_history`.
+
+### Fix 4: Fix `switchPersonaMode()` Schema Corruption & Add `recruitment_talent` (`TalentOS`) Mode (`lib/m360-affinity-engine.js` & `lib/m360-marketing-orchestrator.js`)
+* **Current Defect:**
+  1. `switchPersonaMode()` overwrites `task.marketing_pitch` with `{ profile_type, framing, core_segments, channel_mix }`, losing `title`, `profile_label`, `value_proposition`, `target_segments`, `qualification_criteria`, `recommended_channels`, `budget_overview`, and `disclaimer`, and fails to recalculate `task.budget_estimate` and `task.ab_test_plan`.
+  2. `m360-affinity-engine.js` throws an unhandled error on unclassified prompts instead of requesting clarification, and lacks `recruitment_talent` (`TalentOS`) persona mode.
+* **Required Fix:**
+  1. In `switchPersonaMode()`, recalculate `task.budget_estimate = estimateBudgetScenarios({ budget: task.budget_estimate?.budget_inr || (targetMode === 'b2b_industrial' ? 50000 : 35000), profileType: targetMode, durationDays: 30 })` and `task.ab_test_plan = calculateABSampleSize({ baselineConversion: targetMode === 'b2b_industrial' ? 0.024 : 0.032, expectedLiftPercent: 25, dailyVisitors: 450 })`.
+  2. Keep both the canonical `task.marketing_pitch` fields (`title`, `profile_label`, `value_proposition`, `target_segments`, `qualification_criteria`, `recommended_channels`, `budget_overview`, `disclaimer`) AND the backward-compatible aliases (`profile_type`, `framing`, `core_segments`, `channel_mix`) so both UI renderers and existing unit tests pass 100%.
+  3. Add `RECRUITMENT_TALENT: 'recruitment_talent'` to `PROFILE_TYPES` in `lib/m360-affinity-engine.js` (with hyperlocal candidate segments, rubric qualification criteria, and strict `purpose: 'recruitment'` isolation in `evaluateChannelReadiness()` so job applicants can never be mixed into `b2b_outreach` sales blasts).
+  4. In `runTaskPipeline()`, if `classifyProfile()` returns `UNCLASSIFIED`, do not crash into `failed`; set `task.status = 'clarification_required'` with a clear prompt asking the user to select `B2B Industrial`, `B2C Residential/Affinity`, or `Recruitment/TalentOS`.
+
+### Fix 5: Connect the Multi-Agent Team Board to Real Actions & Gate 1 Enforcement (`lib/m360-marketing-orchestrator.js`)
+* **Current Defect:** `reviewAgentDeliverable()` and `assignAgentTask()` only append chat strings to `inter_agent_dialogue` without affecting workflow state.
+* **Required Fix:**
+  1. When `reviewAgentDeliverable()` records `decision: 'disagreed'` (or `'changes_requested'`) for `agent_outreach`, set `task.agent_team_board.supervisor.review_status = 'changes_requested'`. If `approveChannelDraft()` is called while `review_status === 'changes_requested'`, block approval with `SUPERVISOR_REVISION_REQUIRED` until a new draft revision (`reviseMarketingTaskDraft()`) is generated!
+  2. When `assignAgentTask()` assigns a task to `agent_leads` or `agent_content` and `options.executeSpecialist === true`, trigger the corresponding audience refresh or content asset lookup and record the real artifact count on the board.
+
+### Fix 6: Enable Authenticated Production Reverse Handoffs (`POST /api/marketing/handoff` in `api/marketing.js`)
+* **Current Defect:** `POST /api/marketing/handoff` returns `HTTP 501` whenever `M360_KEYLESS_TEST_MODE !== 'true'`.
+* **Required Fix:**
+  1. Preserve the existing keyless test branch when `process.env.M360_KEYLESS_TEST_MODE === 'true' && body.test_data === true`.
+  2. When called in normal authenticated mode (`access.status === 200` and `body.test_data !== true`):
+     - If `origin === 'leads'`, fetch the workspace's authorized leads via `crmAudience(workspaceId, access.bearer)` (filtering by `body.lead_ids` if provided), attach them via `attachVerifiedHandoff(workspaceId, corrId, { verified: true, origin_module: 'leads', task_id: body.task_id || 'crm-leads-handoff', artifact_id: randomUUID(), test_data: false, contacts })`, and return `HTTP 200` with `{ status: 'verified_handoff_attached', correlation_id: corrId, count: contacts.length }`.
+     - If `origin === 'content'`, load verified workspace assets via `loadSavedContentAssets(workspaceId)` (filtering by `body.asset_ids` if provided), attach via `attachVerifiedHandoff()`, and return `HTTP 200`.
+
+### Fix 7: Add Signed Meta WhatsApp Webhook Handler (`POST /api/marketing/webhooks/whatsapp` in `api/marketing.js`)
+* **Current Defect:** Only `webhooks/brevo` is implemented; there is no webhook listener for Meta WhatsApp Cloud API delivery receipts or inbound `STOP` / CTWA opt-in replies.
+* **Required Fix:**
+  1. Support `GET /api/marketing/webhooks/whatsapp` for Meta webhook verification (`hub.mode === 'subscribe'` and `hub.verify_token === process.env.WHATSAPP_WEBHOOK_VERIFY_TOKEN`, returning `hub.challenge`).
+  2. Support `POST /api/marketing/webhooks/whatsapp` verified with `verifyWebhookSignature(process.env.WHATSAPP_APP_SECRET, rawBody, req.headers['x-hub-signature-256'])`.
+  3. Process inbound status receipts (`sent`, `delivered`, `read`, `failed`) and inbound text messages:
+     - If an inbound message body matches `/^\s*(stop|unsubscribe|opt\s*out)\s*$/i`, automatically mark that phone number `suppressed = true` (`whatsapp_opt_in_status = 'revoked'`) across active workspace tasks.
+     - If an inbound message contains the CTWA opt-in phrase (`"I would like to receive updates"`), update matching workspace contacts to `whatsapp_opt_in_status = 'granted'` with `consent_evidence.whatsapp = { granted: true, source: 'verified_whatsapp_inbound_webhook', timestamp }`.
+
+### Fix 8: Bridge Python Engine `0e7a25a` & Live Overview SSE Progress (`lib/m360-specialist-clients.js` & `lib/m360-control-client.js`)
+* **Current Defect:** `m360-control-client.js` does not subscribe to `/api/marketing/events` to show live Marketing progress in Overview.
+* **Required Fix:**
+  1. In `lib/m360-control-client.js`, when Overview delegates a task to `marketing_activation` and receives a `correlation_id`, open an `EventSource('/api/marketing/events?workspace_id=...' )` (or poll `/api/marketing/tasks`) so the user sees live step updates (`accepted` $\rightarrow$ `requesting_leads` $\rightarrow$ `audience_received` $\rightarrow$ `requesting_content` $\rightarrow$ `draft_ready`) directly inside the Overview progress banner without leaving Overview.
+
+---
+
+## 3. VERIFICATION & ACCEPTANCE SUITE (`tests/marketing-hardening-50personas.test.js`)
+
+Create `workstreams/avinash/frontend/tests/marketing-hardening-50personas.test.js` testing all 8 fixes above:
+1. Verify `m360-email-provider.js` and `m360-whatsapp-provider.js` never return `status: 'delivered'` when unconfigured or offline.
+2. Verify `WORKSPACE_PROVIDER_CREDENTIALS` stores zero plaintext tokens in memory, decrypts via `decryptSecret()`, persists to disk, and builds CTWA links using `display_phone_number`.
+3. Verify `MARKETING_ALLOWED_EMAILS=*` permits consented recipients, and `executeMarketingChannel('WhatsApp')` dispatches via the verified Meta Cloud API adapter with idempotency protection.
+4. Verify `switchPersonaMode()` preserves the full `marketing_pitch` schema, recalculates `budget_estimate`, and supports `recruitment_talent` (`TalentOS`) with strict purpose isolation.
+5. Verify `reviewAgentDeliverable({ decision: 'disagreed' })` blocks Gate 1 approval until a revision occurs.
+6. Verify authenticated `POST /api/marketing/handoff` attaches server-verified CRM leads and Content assets without returning `HTTP 501`.
+7. Verify `POST /api/marketing/webhooks/whatsapp` processes `STOP` opt-outs and CTWA inbound opt-in grants with HMAC signature verification.
+8. Run the full test suite (`npm test`) and confirm **100% pass rate (0 failures)** across all existing 181 tests plus the new hardening tests.
+
+/engageAll use ecc skills and plugins and agents all that, use all the mcps tolls skills agents that are ther used by us and without any bugs and errors all the things working as product for real users 
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-11-06T16:49:17+05:30.
+
+The user has mentioned some items in the form @[ITEM]. Here is extra information about the items that were mentioned by the user, in the order that they appear:
+
+/engageAll is a [Slash Command]:
+<SKILL>The user requested you read and use the "engageAll" skill. The path to the skill file is:
+C:\Users\MAYUR\.gemini\config\plugins\engage-all\skills\engageAll\SKILL.md</SKILL>
+</ADDITIONAL_METADATA>

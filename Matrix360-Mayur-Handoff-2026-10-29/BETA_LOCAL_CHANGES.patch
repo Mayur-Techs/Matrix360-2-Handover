@@ -1,0 +1,67 @@
+# Focused unified review patch for the security-critical runtime changes.
+# The handoff has no Git baseline for the later Marketing files, so this patch
+# intentionally omits unchanged file content and the full regression-test body.
+# Apply only after reviewing context against the target snapshot.
+diff --git a/workstreams/avinash/frontend/lib/m360-marketing-orchestrator.js b/workstreams/avinash/frontend/lib/m360-marketing-orchestrator.js
+--- a/workstreams/avinash/frontend/lib/m360-marketing-orchestrator.js
++++ b/workstreams/avinash/frontend/lib/m360-marketing-orchestrator.js
+@@
+ async function executeMarketingChannel(workspaceId, correlationId, channel, options = {}) {
+   const task = getMarketingTask(workspaceId, correlationId);
+   if (!task) throw new Error('Task not found');
++
++  if (options.mode === 'test_preview') {
++    const curDraft = task.channel_draft_versions?.[channel]?.versions?.slice(-1)[0];
++    const approval = task.approval_history?.findLast(item => item.channel === channel && item.version_hash === curDraft?.version_hash);
++    const failureCode = !task.channel_readiness?.[channel] ? 'UNSUPPORTED_CHANNEL'
++      : !curDraft || curDraft.status !== 'approved' || !approval ? 'STALE_DRAFT_VERSION' : null;
++    const audit = {
++      request_id: options.request_id || randomUUID(), workspace_id: workspaceId,
++      actor_id: options.actor_id || null, actor_role: options.actor_role || 'unknown',
++      action: 'marketing.test_preview', channel, draft_version: curDraft?.version || null,
++      approval_state: curDraft?.status || 'missing', approval_hash: curDraft?.version_hash || null,
++      timestamp: new Date().toISOString(), outcome: failureCode ? 'blocked' : 'preview_ready',
++      failure_code: failureCode, provider_mode: 'non_sending_test_preview', correlation_id: task.correlation_id
++    };
++    task.audit_history ||= [];
++    task.audit_history.push(audit);
++    if (task.audit_history.length > 1000) task.audit_history.splice(0, task.audit_history.length - 1000);
++    task.updated_at = audit.timestamp;
++    saveTasksToDisk();
++    if (failureCode) {
++      const err = new Error(failureCode === 'UNSUPPORTED_CHANNEL'
++        ? `Channel ${channel} is not available for preview.`
++        : `Gate 1 Blocked: Approved ${channel} content changed before preview.`);
++      err.code = failureCode;
++      throw err;
++    }
++    return {
++      request_id: audit.request_id, correlation_id: task.correlation_id, channel,
++      status: 'test_preview_ready', provider_mode: 'non_sending_test_preview', test_mode: true,
++      sent: false, draft_version: curDraft.version, approval_hash: curDraft.version_hash,
++      subject: curDraft.subject || '', body: curDraft.body || '',
++      message: 'Non-sending test preview prepared. Nothing was sent.'
++    };
++  }
+@@
+-  // provider send implementation
++  const err = new Error(`Live ${channel} execution is disabled until a verified provider adapter returns a genuine acknowledgement.`);
++  err.code = 'PROVIDER_ADAPTER_NOT_IMPLEMENTED';
++  err.provider = { name: g3.provider_name, status: 'draft_only' };
++  throw err;
+ }
+diff --git a/workstreams/avinash/frontend/api/marketing.js b/workstreams/avinash/frontend/api/marketing.js
+--- a/workstreams/avinash/frontend/api/marketing.js
++++ b/workstreams/avinash/frontend/api/marketing.js
+@@
+ 'use strict';
++const { randomUUID } = require('node:crypto');
+@@
+         const result = await executeMarketingChannel(workspaceId, corrId, channel, {
+           mode: body.mode,
+-          request_id: body.request_id,
+-          actor: access.membership.role
++          request_id: randomUUID(),
++          actor_id: access.membership.user_id || access.membership.member_id || null,
++          actor_role: access.membership.role
+         });

@@ -1,0 +1,31 @@
+.env
+.venv/
+**/.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+/data/
+/runtime/
+/Input/
+/exports/
+/.playwright-cli/
+/.agents/
+/output/
+/.test-tmp/
+/.test-tmp-*/
+# Local audit notes can include connected-infrastructure findings; never publish them.
+/docs/UNIFIED_AUDIENCE_EXECUTION_STATUS.md
+*.duckdb
+*.sqlite
+*.parquet
+node_modules/
+.coverage
+htmlcov/
+*.log
+
+.env.local
+
+# Local-only validation and recovery material. Keep it out of the shared repository.
+/.bench-director/
+/.release-checkouts/
+/backups/

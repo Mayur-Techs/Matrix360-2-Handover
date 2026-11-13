@@ -1,0 +1,15 @@
+{
+  "name": "matrix360",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "start": "node tools/local-preview.cjs",
+    "test": "node --test workstreams/avinash/frontend/tests/*.test.js workstreams/avinash/frontend/tests/*.test.cjs"
+  },
+  "dependencies": {
+    "libphonenumber-js": "^1.13.15"
+  }
+}

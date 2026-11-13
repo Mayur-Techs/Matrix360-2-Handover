@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://matrix360.local/contracts/crm-import-batch.v1.schema.json",
+  "title": "Matrix360 CRM import batch v1",
+  "type": "object",
+  "required": ["schema_version", "import_batch_id", "workspace_id", "input_count", "accepted_count", "rejected_count", "errors"],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "import_batch_id": { "type": "string" },
+    "workspace_id": { "type": "string" },
+    "input_count": { "type": "integer", "minimum": 0 },
+    "accepted_count": { "type": "integer", "minimum": 0 },
+    "rejected_count": { "type": "integer", "minimum": 0 },
+    "errors": { "type": "array" }
+  },
+  "additionalProperties": true
+}

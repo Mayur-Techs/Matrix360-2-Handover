@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://matrix360.local/contracts/specialist-task.v1.schema.json",
+  "title": "Matrix360 Specialist Task v1",
+  "type": "object",
+  "required": ["schema_version", "task_id", "correlation_id", "workspace_id", "task_type", "status", "artifact_refs"],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "task_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "correlation_id": { "type": "string", "format": "uuid" },
+    "workspace_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "task_type": { "enum": ["audience_discovery", "content_creation"] },
+    "status": { "enum": ["accepted", "clarification_required", "running", "partial", "completed", "failed", "blocked"] },
+    "artifact_refs": { "type": "array", "items": { "type": "object", "required": ["kind", "id"], "properties": { "kind": { "type": "string" }, "id": { "type": "string" }, "approval_state": { "type": "string" } }, "additionalProperties": true } },
+    "counts": { "type": "object" },
+    "error": { "type": ["object", "null"] }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Matrix360 & Lakhotia B2B Industrial Lead Engine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen p-5">
+    <div class="max-w-[1560px] mx-auto space-y-4">
+        <!-- Header -->
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4">
+            <div>
+                <h1 class="text-2xl font-bold text-white flex items-center gap-2">
+                    <span>⚡ Matrix360 &amp; Lakhotia Industrial Lead Engine</span>
+                    <span class="text-xs bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2.5 py-0.5 rounded-full font-mono">Autonomous 500-Lead Quota System</span>
+                </h1>
+                <p class="text-xs text-slate-400 mt-0.5">Google Maps Autonomous Discovery + DNS MX Email Verification + Validated Phones + Executive LinkedIn X-Ray + Lakhotia Pre-Filters</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+                <button onclick="loadLakhotiaPreset()" class="bg-amber-950 hover:bg-amber-900 text-amber-200 border border-amber-700/80 px-3 py-1.5 rounded-lg text-xs font-medium transition">
+                    🏭 Lakhotia Industrial Preset
+                </button>
+                <button onclick="loadMultiStatePreset()" class="bg-indigo-950 hover:bg-indigo-900 text-indigo-200 border border-indigo-700/80 px-3 py-1.5 rounded-lg text-xs font-medium transition">
+                    🌐 Multi-State Preset
+                </button>
+                <button onclick="toggleSuppressionModal()" class="bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 px-3 py-1.5 rounded-lg text-xs font-medium transition">
+                    🚫 Suppression List (<span id="suppCount">0</span>)
+                </button>
+                <button onclick="toggleCrmModal()" class="bg-blue-950 hover:bg-blue-900 text-blue-200 border border-blue-700/80 px-3 py-1.5 rounded-lg text-xs font-medium transition flex items-center gap-1.5">
+                    <span>🔄</span> Push to Avinash CRM
+                </button>
+                <a href="/api/leads/csv" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3.5 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
+                    <span>⬇</span> Download Verified CSV
+                </a>
+                <button onclick="clearAllLeads()" class="bg-rose-950/80 hover:bg-rose-900 text-rose-200 border border-rose-800/80 px-3 py-1.5 rounded-lg text-xs font-medium transition">
+                    Clear DB
+                </button>
+            </div>
+        </div>
+
+        <!-- Filter & Control Panel -->
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 space-y-3.5 shadow-xl">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-3.5">
+                <div class="md:col-span-4">
+                    <label class="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider">Keywords / Industries (comma-separated)</label>
+                    <input id="keyword" type="text"
+                        value="Manufacturing, industrial, plant, factory, warehouse, logistics, distribution, 3PL"
+                        class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500" />
+                </div>
+                <div class="md:col-span-4">
+                    <label class="block text-[11px] font-semibold text-slate-400 mb-1 uppercase tracking-wider">Geography / Industrial Hubs (States or Cities)</label>
+                    <input id="location" type="text"
+                        value="West Bengal, Howrah, Kolkata, Hooghly, Dankuni, Durgapur, Asansol"
+                        class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500" />
+                </div>
+                <div class="md:col-span-4">
+                    <label class="block text-[11px] font-semibold text-emerald-400 mb-1 uppercase tracking-wider">Strict Quota Guarantee (Field Verification)</label>
+                    <select id="requireMode" class="w-full bg-slate-950 border border-emerald-700/70 rounded-lg px-3 py-2 text-xs text-emerald-200 focus:outline-none">
+                        <option value="both" selected>Require BOTH Verified Email (DNS MX) + Valid Phone</option>
+                        <option value="email">Require Verified Email (DNS MX) Only</option>
+                        <option value="phone">Require Validated Phone Number Only</option>
+                        <option value="either">Require EITHER Verified Email OR Valid Phone</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Advanced Sub-Filters -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-3.5 pt-2 border-t border-slate-800/80 items-end">
+                <div class="md:col-span-3">
+                    <label class="block text-[11px] font-medium text-slate-400 mb-1">Decision-Maker Job Titles</label>
+                    <input id="targetTitles" type="text"
+                        value="Founder, Owner, MD, CEO, Director, Partner, COO, Plant Head, Expansion Head, Logistics Head"
+                        class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" />
+                </div>
+                <div class="md:col-span-3">
+                    <label class="block text-[11px] font-medium text-slate-400 mb-1">Exclusions (Negative Filters)</label>
+                    <input id="exclusions" type="text"
+                        value="IT, consulting, marketing, recruitment, BFSI, education, junior roles, retail, hotel, restaurant, residential"
+                        class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-rose-200 focus:outline-none focus:border-rose-500" />
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-[11px] font-medium text-slate-400 mb-1">Company Size Filter</label>
+                    <select id="companySize" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-200">
+                        <option value="11–50 to 1,001–5,000">11–50 through 1,001–5,000</option>
+                        <option value="11–50 to 200">11–50 through 51–200</option>
+                        <option value="201–500 to 5,000">201–500 through 1,001–5,000</option>
+                    </select>
+                </div>
+                <div class="md:col-span-2">
+                    <div class="flex justify-between text-[11px] text-slate-400 mb-1">
+                        <span>Target Quota</span>
+                        <span id="sliderLabel" class="font-mono text-indigo-400 font-bold">500</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <input id="maxLeadsSlider" type="range" min="5" max="2000" step="10" value="500"
+                            oninput="syncLeadCount(this.value)" class="w-full accent-indigo-500 cursor-pointer" />
+                        <input id="maxLeadsInput" type="number" min="1" max="5000" value="500"
+                            oninput="syncLeadCount(this.value)"
+                            class="w-16 bg-slate-950 border border-slate-700 rounded px-1.5 py-1 text-xs text-center font-mono text-white" />
+                    </div>
+                </div>
+                <div class="md:col-span-1">
+                    <label class="flex items-center gap-1.5 text-[11px] text-slate-400 cursor-pointer mb-2">
+                        <input type="checkbox" id="headlessMode" checked class="accent-indigo-500" />
+                        <span>Headless</span>
+                    </label>
+                </div>
+                <div class="md:col-span-1 flex gap-1.5">
+                    <button id="startBtn" onclick="startAgent()"
+                        class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 px-3 rounded-lg text-xs transition shadow-lg shadow-indigo-600/30">
+                        ▶ Start
+                    </button>
+                    <button id="stopBtn" onclick="stopAgent()"
+                        class="hidden w-full bg-rose-600 hover:bg-rose-500 text-white font-semibold py-2 px-3 rounded-lg text-xs transition shadow-lg shadow-rose-600/30">
+                        ⬛ Stop
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Telemetry & Live Telemetry Bar -->
+        <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3.5 space-y-2.5">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-2.5">
+                    <span id="statusDot" class="h-3 w-3 rounded-full bg-emerald-500"></span>
+                    <span id="statusLog" class="text-xs font-mono text-slate-300">Engine Ready. All AI Agents &amp; Lakhotia filters active.</span>
+                </div>
+                <div class="flex flex-wrap items-center gap-2.5 text-xs font-mono">
+                    <span class="bg-emerald-950/90 text-emerald-300 border border-emerald-800 px-2.5 py-1 rounded">
+                        ✅ Verified Saved: <b id="statSaved">0</b>
+                    </span>
+                    <span class="bg-slate-950 text-slate-300 border border-slate-800 px-2.5 py-1 rounded">
+                        🔍 Scanned: <b id="statScanned">0</b>
+                    </span>
+                    <span class="bg-amber-950/70 text-amber-300 border border-amber-800/60 px-2.5 py-1 rounded">
+                        ⏭ Skipped: <b id="statSkipped">0</b>
+                    </span>
+                    <span class="bg-indigo-950/80 text-indigo-300 border border-indigo-800/70 px-2.5 py-1 rounded">
+                        🎯 Target: <b id="statTarget">500</b>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="flex flex-wrap items-center justify-between gap-4 pt-1">
+                <div class="w-full md:w-1/2 bg-slate-950 h-2.5 rounded-full overflow-hidden border border-slate-800">
+                    <div id="progressBar" class="bg-gradient-to-r from-indigo-500 to-emerald-500 h-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+
+                <!-- Instant Table Filters -->
+                <div class="flex flex-wrap items-center gap-2.5 text-xs">
+                    <label class="flex items-center gap-1.5 bg-slate-950 border border-slate-800 px-2.5 py-1 rounded cursor-pointer">
+                        <input type="checkbox" id="filterDm" onchange="fetchLeads()" class="accent-indigo-500" />
+                        <span class="text-indigo-300 font-medium">Has Decision Maker</span>
+                    </label>
+                    <label class="flex items-center gap-1.5 bg-slate-950 border border-slate-800 px-2.5 py-1 rounded cursor-pointer">
+                        <input type="checkbox" id="filterEmail" onchange="fetchLeads()" class="accent-emerald-500" />
+                        <span class="text-emerald-300 font-medium">Verified Email (MX)</span>
+                    </label>
+                    <label class="flex items-center gap-1.5 bg-slate-950 border border-slate-800 px-2.5 py-1 rounded cursor-pointer">
+                        <input type="checkbox" id="filterPhone" onchange="fetchLeads()" class="accent-cyan-500" />
+                        <span class="text-cyan-300 font-medium">Valid Phone</span>
+                    </label>
+                    <select id="filterVerdict" onchange="fetchLeads()" class="bg-slate-950 border border-slate-800 px-2.5 py-1 rounded text-slate-300 text-xs">
+                        <option value="">All Lakhotia Verdicts</option>
+                        <option value="PREPASS">PREPASS Only</option>
+                        <option value="REVIEW">REVIEW Only</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Verified Leads Results Table -->
+        <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-x-auto shadow-2xl">
+            <table class="w-full text-left border-collapse text-sm">
+                <thead>
+                    <tr class="border-b border-slate-800 text-slate-400 text-[11px] uppercase tracking-wider bg-slate-950/80">
+                        <th class="p-3.5">Company &amp; Location</th>
+                        <th class="p-3.5">Lakhotia Fit</th>
+                        <th class="p-3.5">Decision Maker (Role &amp; LinkedIn)</th>
+                        <th class="p-3.5">Verified Email (DNS MX)</th>
+                        <th class="p-3.5">Validated Phone</th>
+                        <th class="p-3.5">Niche &amp; Size</th>
+                        <th class="p-3.5">Website &amp; Socials</th>
+                    </tr>
+                </thead>
+                <tbody id="leadsTableBody" class="divide-y divide-slate-800/60 font-sans"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Suppression List Modal -->
+    <div id="suppModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
+        <div class="bg-slate-900 border border-slate-700 rounded-xl max-w-lg w-full p-5 space-y-4 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <span>🚫 Campaign Suppression &amp; Exclusion List</span>
+                </h3>
+                <button onclick="toggleSuppressionModal()" class="text-slate-400 hover:text-white text-sm">✕</button>
+            </div>
+            <p class="text-xs text-slate-400">
+                Paste emails, phone numbers, domains, or company names from previous campaigns (sent, bounced, unsubscribed, or existing leads). The agents will strictly bypass them.
+            </p>
+            <textarea id="suppInput" rows="6" placeholder="ceo@company.com, +91 9831234567, sampledomain.com..."
+                class="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-xs font-mono text-slate-200 focus:outline-none focus:border-indigo-500"></textarea>
+            <div class="flex justify-between items-center">
+                <button onclick="clearSuppression()" class="text-xs text-rose-400 hover:underline">Clear All Suppressed</button>
+                <div class="flex gap-2">
+                    <button onclick="toggleSuppressionModal()" class="bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg text-xs">Cancel</button>
+                    <button onclick="saveSuppression()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-1.5 rounded-lg text-xs font-semibold">Add to Suppression</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let ws = null;
+
+        function syncLeadCount(val) {
+            const clamped = Math.max(1, Math.min(5000, parseInt(val) || 500));
+            document.getElementById("maxLeadsSlider").value = clamped;
+            document.getElementById("maxLeadsInput").value = clamped;
+            document.getElementById("sliderLabel").innerText = clamped;
+            document.getElementById("statTarget").innerText = clamped;
+        }
+
+        function loadLakhotiaPreset() {
+            document.getElementById("keyword").value = "Manufacturing, industrial, plant, factory, warehouse, logistics, fabrication, 3PL, components";
+            document.getElementById("location").value = "Howrah, Kolkata, Hooghly, Dankuni, Uluberia, Domjur, Durgapur, Asansol, Haldia";
+            document.getElementById("targetTitles").value = "Founder, Owner, MD, Managing Director, CEO, Director, Partner, COO, Plant Head, Expansion Head, Logistics Head";
+            document.getElementById("exclusions").value = "IT, consulting, marketing, recruitment, BFSI, education, junior roles, retail, hotel, restaurant, residential";
+            document.getElementById("companySize").value = "11–50 to 1,001–5,000";
+            document.getElementById("requireMode").value = "both";
+            syncLeadCount(500);
+        }
+
+        function loadMultiStatePreset() {
+            document.getElementById("keyword").value = "Manufacturing, industrial, plant, warehouse, logistics, distribution, 3PL";
+            document.getElementById("location").value = "West Bengal, Odisha, Jharkhand, Bihar, Assam";
+            document.getElementById("targetTitles").value = "Founder, Owner, MD, CEO, Director, Partner, COO, Plant Head, Logistics Head";
+            document.getElementById("exclusions").value = "IT, consulting, marketing, recruitment, BFSI, education, junior roles, retail, hotel, residential";
+            document.getElementById("companySize").value = "11–50 to 1,001–5,000";
+            document.getElementById("requireMode").value = "both";
+            syncLeadCount(500);
+        }
+
+        function toggleSuppressionModal() {
+            document.getElementById("suppModal").classList.toggle("hidden");
+        }
+
+        async function refreshSuppressionCount() {
+            try {
+                const res = await fetch("/api/suppression");
+                const data = await res.json();
+                document.getElementById("suppCount").innerText = data.count || 0;
+            } catch (e) {}
+        }
+
+        async function saveSuppression() {
+            const raw_text = document.getElementById("suppInput").value.trim();
+            if (!raw_text) return;
+            await fetch("/api/suppression", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ raw_text, reason: "campaign_exclusion" })
+            });
+            document.getElementById("suppInput").value = "";
+            await refreshSuppressionCount();
+            toggleSuppressionModal();
+        }
+
+        async function clearSuppression() {
+            if (!confirm("Clear all suppressed contacts?")) return;
+            await fetch("/api/suppression", { method: "DELETE" });
+            await refreshSuppressionCount();
+        }
+
+        function connectWebSocket() {
+            const proto = window.location.protocol === "https:" ? "wss" : "ws";
+            ws = new WebSocket(`${proto}://${window.location.host}/ws/progress`);
+
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                if (data.message) document.getElementById("statusLog").innerText = data.message;
+                if (data.processed !== undefined) document.getElementById("statSaved").innerText = data.processed;
+                if (data.scanned !== undefined) document.getElementById("statScanned").innerText = data.scanned;
+                if (data.skipped !== undefined) document.getElementById("statSkipped").innerText = data.skipped;
+                if (data.total !== undefined) document.getElementById("statTarget").innerText = data.total;
+
+                const dot = document.getElementById("statusDot");
+                const startBtn = document.getElementById("startBtn");
+                const stopBtn = document.getElementById("stopBtn");
+
+                if (data.is_running) {
+                    dot.className = "h-3 w-3 rounded-full bg-amber-400 animate-pulse";
+                    startBtn.classList.add("hidden");
+                    stopBtn.classList.remove("hidden");
+                } else {
+                    dot.className = "h-3 w-3 rounded-full bg-emerald-500";
+                    startBtn.classList.remove("hidden");
+                    stopBtn.classList.add("hidden");
+                }
+
+                if (data.total > 0 && data.processed !== undefined) {
+                    const pct = Math.min(100, Math.round((data.processed / data.total) * 100));
+                    document.getElementById("progressBar").style.width = `${pct}%`;
+                }
+
+                if (data.type === "lead" || data.type === "done") {
+                    fetchLeads();
+                }
+            };
+
+            ws.onclose = () => setTimeout(connectWebSocket, 3000);
+        }
+
+        async function startAgent() {
+            const payload = {
+                keyword: document.getElementById("keyword").value.trim(),
+                location: document.getElementById("location").value.trim(),
+                max_leads: parseInt(document.getElementById("maxLeadsInput").value) || 500,
+                target_titles: document.getElementById("targetTitles").value.trim(),
+                exclusions: document.getElementById("exclusions").value.trim(),
+                company_size: document.getElementById("companySize").value,
+                require_mode: document.getElementById("requireMode").value,
+                headless: document.getElementById("headlessMode").checked
+            };
+            if (!payload.keyword || !payload.location) {
+                alert("Please enter Keywords and Geography.");
+                return;
+            }
+            document.getElementById("progressBar").style.width = "2%";
+            document.getElementById("startBtn").classList.add("hidden");
+            document.getElementById("stopBtn").classList.remove("hidden");
+
+            const res = await fetch("/api/scrape", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            if (data.status === "busy") {
+                alert(data.message);
+            }
+        }
+
+        async function stopAgent() {
+            await fetch("/api/stop", { method: "POST" });
+        }
+
+        async function clearAllLeads() {
+            if (!confirm("Delete all saved leads from the database?")) return;
+            await fetch("/api/leads", { method: "DELETE" });
+            document.getElementById("statSaved").innerText = "0";
+            document.getElementById("progressBar").style.width = "0%";
+            fetchLeads();
+        }
+
+        async function fetchLeads() {
+            const hasDm = document.getElementById("filterDm").checked;
+            const hasEmail = document.getElementById("filterEmail").checked;
+            const hasPhone = document.getElementById("filterPhone").checked;
+            const verdict = document.getElementById("filterVerdict").value;
+
+            const res = await fetch(`/api/leads?has_dm=${hasDm}&has_email=${hasEmail}&has_phone=${hasPhone}&verdict=${verdict}`);
+            const leads = await res.json();
+
+            const tbody = document.getElementById("leadsTableBody");
+            if (!leads.length) {
+                tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-slate-500 text-xs">No verified leads found matching filters yet. Click <b>Start</b> to begin autonomous discovery.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = leads.map(l => {
+                // Decision maker presentation
+                const dmHtml = l.dm_name
+                    ? `<div class="font-semibold text-indigo-300">${esc(l.dm_name)}</div>
+                       <div class="text-[11px] text-slate-400">${esc(l.dm_role || "Executive")}</div>
+                       ${l.dm_linkedin ? `<a href="${esc(l.dm_linkedin)}" target="_blank" class="inline-block mt-1 text-[11px] bg-blue-500/20 text-blue-300 border border-blue-500/30 px-2 py-0.5 rounded hover:underline">LinkedIn Profile ↗</a>` : ""}`
+                    : (l.dm_linkedin
+                        ? `<a href="${esc(l.dm_linkedin)}" target="_blank" class="text-xs bg-blue-500/20 text-blue-300 px-2 py-1 rounded hover:underline">Executive LinkedIn ↗</a>`
+                        : `<span class="text-slate-600 text-xs">Not detected</span>`);
+
+                // Email badge
+                const emailBadge = l.email
+                    ? `<div class="text-emerald-400 font-mono text-xs break-all">${esc(l.email)}</div>
+                       <span class="inline-block mt-0.5 text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-1.5 py-0.2 rounded font-mono">✓ ${esc(l.email_status || "Verified")}</span>`
+                    : `<span class="text-slate-600 text-xs">-</span>`;
+
+                // Phone badge
+                const phoneBadge = l.phone
+                    ? `<div class="text-cyan-300 font-mono text-xs whitespace-nowrap">${esc(l.phone)}</div>
+                       <span class="inline-block mt-0.5 text-[10px] bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 px-1.5 py-0.2 rounded font-mono">✓ ${esc(l.phone_status || "Valid")}</span>`
+                    : `<span class="text-slate-600 text-xs">-</span>`;
+
+                // Lakhotia Fit Badge
+                const v = l.verdict || "REVIEW";
+                const vColor = v === "PREPASS" ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40" : (v === "REVIEW" ? "bg-amber-500/20 text-amber-300 border-amber-500/40" : "bg-rose-500/20 text-rose-300 border-rose-500/40");
+                const verdictBadge = `
+                    <span class="inline-block text-[11px] font-bold border px-2 py-0.5 rounded ${vColor}">${esc(v)}</span>
+                    ${l.facility_evidence ? `<div class="text-[10px] text-slate-400 mt-1 max-w-[180px] truncate" title="${esc(l.facility_evidence)}">🏭 ${esc(l.facility_evidence)}</div>` : ''}
+                `;
+
+                // Socials
+                const socials = [];
+                if (l.website) socials.push(`<a href="${esc(l.website)}" target="_blank" class="text-indigo-400 hover:underline">Website</a>`);
+                if (l.linkedin) socials.push(`<a href="${esc(l.linkedin)}" target="_blank" class="text-blue-400 hover:underline">LI</a>`);
+                if (l.instagram) socials.push(`<a href="${esc(l.instagram)}" target="_blank" class="text-pink-400 hover:underline">IG</a>`);
+                if (l.facebook) socials.push(`<a href="${esc(l.facebook)}" target="_blank" class="text-sky-400 hover:underline">FB</a>`);
+
+                return `
+                    <tr class="hover:bg-slate-800/40 align-top transition">
+                        <td class="p-3.5">
+                            <a href="${esc(l.maps_url || '#')}" target="_blank" class="font-medium text-white hover:text-indigo-400 flex items-center gap-1">
+                                <span>${esc(l.business_name)}</span>
+                                ${l.maps_url ? '<span class="text-[10px] text-slate-500">📍</span>' : ''}
+                            </a>
+                            <div class="text-xs text-slate-400">${esc(l.location || "")}</div>
+                            <div class="text-[11px] text-slate-500 max-w-xs truncate mt-0.5">${esc(l.address || "")}</div>
+                        </td>
+                        <td class="p-3.5">${verdictBadge}</td>
+                        <td class="p-3.5">${dmHtml}</td>
+                        <td class="p-3.5">${emailBadge}</td>
+                        <td class="p-3.5">${phoneBadge}</td>
+                        <td class="p-3.5 text-xs">
+                            <div class="text-slate-300 font-medium">${esc(l.niche || "")}</div>
+                            <div class="text-slate-500 text-[11px]">${esc(l.company_size || "")}</div>
+                        </td>
+                        <td class="p-3.5 text-xs space-x-2 font-medium">${socials.join(" · ") || "-"}</td>
+                    </tr>
+                `;
+            }).join("");
+        }
+
+        function esc(s) {
+            if (!s) return "";
+            const d = document.createElement("div");
+            d.textContent = s;
+            return d.innerHTML;
+        }
+
+        connectWebSocket();
+        fetchLeads();
+        refreshSuppressionCount();
+    </script>
+    <!-- CRM Push Modal -->
+    <div id="crmModal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
+        <div class="bg-slate-900 border border-slate-700 rounded-xl max-w-md w-full p-5 space-y-4 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <span>🔄 Push Verified Leads to Avinash CRM</span>
+                </h3>
+                <button onclick="toggleCrmModal()" class="text-slate-400 hover:text-white text-sm">✕</button>
+            </div>
+            <p class="text-xs text-slate-400">
+                Pushes all currently verified leads directly into Avinash's CRM workspace pipeline.
+            </p>
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="block text-slate-400 mb-1">Target Workspace ID</label>
+                    <input id="crmWorkspace" type="text" value="lakhotia" placeholder="e.g. lakhotia or workspace slug"
+                        class="w-full bg-slate-950 border border-slate-700 rounded p-2 text-white font-mono focus:border-indigo-500" />
+                </div>
+                <div>
+                    <label class="block text-slate-400 mb-1">CRM API Base URL</label>
+                    <input id="crmBaseUrl" type="text" value="http://localhost:8000" placeholder="http://localhost:8000 or Render URL"
+                        class="w-full bg-slate-950 border border-slate-700 rounded p-2 text-white font-mono focus:border-indigo-500" />
+                </div>
+                <div>
+                    <label class="block text-slate-400 mb-1">CRM Auth Token (Bearer)</label>
+                    <input id="crmToken" type="password" placeholder="Paste session access_token here"
+                        class="w-full bg-slate-950 border border-slate-700 rounded p-2 text-white font-mono focus:border-indigo-500" />
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-slate-400 mb-1">Pipeline Stage</label>
+                        <select id="crmStage" class="w-full bg-slate-950 border border-slate-700 rounded p-2 text-white">
+                            <option value="qualified" selected>qualified</option>
+                            <option value="enquiry">enquiry</option>
+                            <option value="consultation">consultation</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-slate-400 mb-1">Max Leads to Push</label>
+                        <input id="crmLimit" type="number" value="100" min="1" max="5000"
+                            class="w-full bg-slate-950 border border-slate-700 rounded p-2 text-white font-mono" />
+                    </div>
+                </div>
+                <div id="crmStatusMsg" class="hidden text-xs p-2 rounded bg-slate-950 border border-slate-800"></div>
+            </div>
+            <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
+                <button onclick="toggleCrmModal()" class="bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg text-xs">Cancel</button>
+                <button id="crmPushBtn" onclick="executeCrmPush()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-1.5 rounded-lg text-xs font-semibold">
+                    Confirm &amp; Push Leads
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleCrmModal() {
+            document.getElementById("crmModal").classList.toggle("hidden");
+        }
+
+        async function executeCrmPush() {
+            const btn = document.getElementById("crmPushBtn");
+            const statusBox = document.getElementById("crmStatusMsg");
+            const workspace = document.getElementById("crmWorkspace").value.trim();
+            const token = document.getElementById("crmToken").value.trim();
+            const baseUrl = document.getElementById("crmBaseUrl").value.trim();
+            const stage = document.getElementById("crmStage").value;
+            const limit = parseInt(document.getElementById("crmLimit").value) || 100;
+
+            if (!workspace || !token) {
+                alert("Please enter both Workspace ID and CRM Auth Token.");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = "Pushing...";
+            statusBox.classList.remove("hidden");
+            statusBox.className = "text-xs p-2 rounded bg-indigo-950/60 border border-indigo-800 text-indigo-300";
+            statusBox.innerText = "Transmitting verified leads to Avinash CRM...";
+
+            try {
+                const res = await fetch("/api/leads/push-to-crm", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        workspace_id: workspace,
+                        auth_token: token,
+                        crm_api_base: baseUrl,
+                        stage: stage,
+                        limit: limit
+                    })
+                });
+                const data = await res.json();
+                if (data.status === "completed") {
+                    statusBox.className = "text-xs p-2 rounded bg-emerald-950/80 border border-emerald-800 text-emerald-300";
+                    statusBox.innerText = `✅ Successfully pushed ${data.pushed} leads into workspace '${workspace}'! (Failed: ${data.failed})`;
+                } else {
+                    statusBox.className = "text-xs p-2 rounded bg-rose-950/80 border border-rose-800 text-rose-300";
+                    statusBox.innerText = `❌ Error: ${data.message || "Failed to push leads"}`;
+                }
+            } catch (err) {
+                statusBox.className = "text-xs p-2 rounded bg-rose-950/80 border border-rose-800 text-rose-300";
+                statusBox.innerText = `❌ Network Error: ${err.message}`;
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Confirm & Push Leads";
+            }
+        }
+    </script>
+</body>
+</html>

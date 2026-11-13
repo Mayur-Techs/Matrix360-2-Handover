@@ -1,0 +1,4 @@
+Rendered Chrome review at 1440x900 on http://127.0.0.1:8048/client-dashboard.html#marketing.
+Observed guided four-step workflow, dark-theme cards, readable Manrope/DM Sans hierarchy, collapsed advanced tools, generated WhatsApp copy, channel tabs, calendar and controlled test-email panel.
+WhatsApp draft preview produced: Draft preview prepared. Nothing was sent.
+Browser console errors: 0.

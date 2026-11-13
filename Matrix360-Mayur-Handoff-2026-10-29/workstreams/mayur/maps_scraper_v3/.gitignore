@@ -1,0 +1,17 @@
+# Local lead data, credentials, browser state, and generated files must never be committed.
+leads.db
+*.db
+*.sqlite
+*.sqlite3
+.env
+.env.local
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+playwright-report/
+test-results/
+output/
+exports/
+runtime/
+*.log

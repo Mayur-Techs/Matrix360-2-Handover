@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cross-Channel Analytics &amp; Delivery Telemetry — Matrix360</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: #111827;
+      --border: #1f2937;
+      --text: #f9fafb;
+      --text-muted: #9ca3af;
+      --primary: #3b82f6;
+      --wa-green: #25d366;
+      --em-blue: #38bdf8;
+      --green: #10b981;
+      --yellow: #f59e0b;
+      --red: #ef4444;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); padding: 2rem 1rem; display: flex; justify-content: center; min-height: 100vh; }
+    .container { max-width: 1080px; width: 100%; display: flex; flex-direction: column; gap: 1.5rem; }
+
+    .header-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.75rem; }
+    .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
+    .title-wrap { display: flex; align-items: center; gap: 0.75rem; }
+    h1 { font-size: 1.5rem; font-weight: 700; }
+    
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
+    .card h2 { font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem; }
+    .panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+
+    .spend-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+    .spend-item { background: #0f172a; padding: 1rem; border-radius: 8px; border: 1px solid #1e293b; display: flex; flex-direction: column; gap: 0.375rem; }
+    .spend-item .label { font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600; }
+    .spend-item .val { font-size: 1.375rem; font-weight: 700; color: #f8fafc; }
+    .highlight-fee { border-color: rgba(59, 130, 246, 0.4); background: rgba(59, 130, 246, 0.05); }
+    .fee-note { font-size: 0.6875rem; color: var(--text-muted); margin-top: 0.25rem; }
+
+    .health-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+    .health-item { background: #0f172a; padding: 1rem; border-radius: 8px; border: 1px solid #1e293b; }
+    .health-item .label { font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.25rem; }
+    .health-item .val { font-size: 1.25rem; font-weight: 700; color: #f8fafc; }
+    .health-item .threshold { font-size: 0.6875rem; color: var(--text-muted); display: block; margin-top: 0.25rem; }
+
+    .badge { display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.25rem 0.625rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
+    .badge-green, .badge-healthy { background: rgba(16, 185, 129, 0.15); color: var(--green); border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-yellow, .badge-warning { background: rgba(245, 158, 11, 0.15); color: var(--yellow); border: 1px solid rgba(245, 158, 11, 0.3); }
+    .badge-red { background: rgba(239, 68, 68, 0.15); color: var(--red); border: 1px solid rgba(239, 68, 68, 0.3); }
+
+    .badge-channel { font-size: 0.6875rem; padding: 0.125rem 0.375rem; border-radius: 4px; margin-right: 0.25rem; font-weight: 600; }
+    .wa-pill { background: rgba(37, 211, 102, 0.15); color: var(--wa-green); border: 1px solid rgba(37, 211, 102, 0.3); }
+    .em-pill { background: rgba(56, 189, 248, 0.15); color: var(--em-blue); border: 1px solid rgba(56, 189, 248, 0.3); }
+
+    .volume-cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
+    .channel-card h3 { font-size: 1rem; margin-bottom: 0.75rem; color: #f3f4f6; }
+    .metric-row { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #1e293b; font-size: 0.875rem; }
+    .metric-row:last-child { border-bottom: none; }
+    .metric-row span { color: var(--text-muted); }
+
+    .analytics-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    .analytics-table th, .analytics-table td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid #1e293b; font-size: 0.875rem; }
+    .analytics-table th { font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); background: #0f172a; }
+
+    .btn { background: var(--primary); color: white; border: none; padding: 0.625rem 1.25rem; border-radius: 8px; font-weight: 600; font-size: 0.875rem; cursor: pointer; transition: opacity 0.2s; }
+    .btn:hover { opacity: 0.9; }
+    .btn-secondary { background: #1e293b; color: #f1f5f9; border: 1px solid #334155; }
+    .btn-secondary:hover { background: #334155; }
+
+    .warning-alert { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); color: #fef3c7; padding: 0.75rem 1rem; border-radius: 6px; font-size: 0.8125rem; margin-top: 0.75rem; }
+
+    .empty-state-card { background: var(--card-bg); border: 1px dashed #334155; border-radius: 12px; padding: 3rem 2rem; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+    .empty-icon { font-size: 2.5rem; }
+    .empty-state-card h3 { font-size: 1.125rem; font-weight: 600; color: #f8fafc; }
+    .empty-state-card p { font-size: 0.875rem; color: var(--text-muted); max-width: 500px; line-height: 1.5; }
+    .empty-status-pill { display: inline-block; padding: 0.375rem 0.875rem; background: #0f172a; border: 1px solid #1e293b; border-radius: 9999px; font-size: 0.75rem; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:0.5rem;">
+      <a href="client-dashboard.html" style="display:inline-flex;align-items:center;gap:6px;color:#38bdf8;text-decoration:none;font-size:0.875rem;font-weight:600;padding:6px 12px;background:#111827;border:1px solid #1f2937;border-radius:8px;">← Back to Dashboard</a>
+      <div style="display:flex;align-items:center;gap:8px;font-size:0.8125rem;">
+        <a href="whatsapp-status.html" style="color:#9ca3af;text-decoration:none;padding:4px 8px;">WhatsApp</a>
+        <span style="color:#374151">|</span>
+        <a href="email-status.html" style="color:#9ca3af;text-decoration:none;padding:4px 8px;">Email</a>
+        <span style="color:#374151">|</span>
+        <a href="pilot.html" style="color:#9ca3af;text-decoration:none;padding:4px 8px;">Pilot</a>
+      </div>
+    </div>
+    <div class="header-card">
+      <div class="header-top">
+        <div class="title-wrap">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--primary);"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          <h1>Cross-Channel Analytics &amp; Delivery Telemetry</h1>
+        </div>
+        <button id="btn-refresh" class="btn btn-secondary" onclick="loadAnalytics()">Refresh</button>
+      </div>
+      <p style="color:var(--text-muted); font-size:0.875rem;">
+        Real-time telemetry aggregated directly from verified provider webhooks (Meta WhatsApp &amp; Brevo Email). Zero simulated metrics.
+      </p>
+    </div>
+
+    <div id="dashboard-content">
+      <div class="card" style="text-align:center; padding: 2rem;">
+        <span style="color:var(--text-muted);">Loading telemetry data...</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function getAuthToken() {
+      try {
+        const val = sessionStorage.getItem('matrix360_pilot_token') || localStorage.getItem('m360_token') || localStorage.getItem('matrix360_pilot_token');
+        if (val) return val;
+        if (sessionStorage.getItem('matrix360_showcase') === 'true' || window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') {
+          return 'matrix360-isolated-showcase';
+        }
+        return '';
+      } catch {
+        return 'matrix360-isolated-showcase';
+      }
+    }
+
+    async function loadAnalytics() {
+      const params = new URLSearchParams(window.location.search);
+      const token = getAuthToken();
+      const defaultWs = token === 'matrix360-isolated-showcase' ? 'showcase' : 'lakhotia';
+      const wsId = params.get('workspace_id') || sessionStorage.getItem('m360_active_workspace') || sessionStorage.getItem('matrix360_active_workspace') || defaultWs;
+      const container = document.getElementById('dashboard-content');
+
+      try {
+        const token = getAuthToken();
+        const headers = token ? { 'Authorization': 'Bearer ' + token, 'Accept': 'application/json' } : { 'Accept': 'application/json' };
+        const res = await fetch(`/api/marketing?action=analytics&workspace_id=${encodeURIComponent(wsId)}`, { headers });
+
+        if (!res.ok) {
+          throw new Error('Failed to load analytics: HTTP ' + res.status);
+        }
+
+        const data = await res.json();
+        renderClientView(data);
+      } catch (err) {
+        container.innerHTML = `
+          <div class="card" style="border-color: rgba(239, 68, 68, 0.3); text-align:center; padding: 2rem;">
+            <p style="color: var(--red); font-weight: 600;">Unable to load analytics.</p>
+            <p style="color: var(--text-muted); font-size: 0.8125rem; margin-top: 0.5rem;">${err.message}</p>
+          </div>
+        `;
+      }
+    }
+
+    function renderClientView(data) {
+      const container = document.getElementById('dashboard-content');
+      const hasActivity = data.has_activity === true || (data.overview?.total_messages_sent || 0) > 0;
+      const campaigns = Array.isArray(data.campaigns) ? data.campaigns : [];
+
+      if (!hasActivity && campaigns.length === 0) {
+        container.innerHTML = `
+          <div id="analytics-empty-state" class="empty-state-card">
+            <div class="empty-icon">📊</div>
+            <h3>No campaigns sent yet. Metrics will appear after your first dispatch.</h3>
+            <p>Matrix360 shows real delivery telemetry directly from Meta WhatsApp and Brevo Email webhooks. No simulated numbers or placeholder graphs.</p>
+            <div class="empty-status-pill">System Status: Ready for Dispatch</div>
+          </div>
+        `;
+        return;
+      }
+
+      const overview = data.overview || {};
+      const spend = overview.spend || {};
+      const health = overview.delivery_health || { status: 'HEALTHY', rates: {}, warnings: [] };
+      const wa = overview.channels?.whatsapp || {};
+      const em = overview.channels?.email || {};
+
+      const healthBadge = health.status === 'WARNING' ? 'badge-yellow' : 'badge-green';
+      const warningsHtml = (health.warnings || []).map(w => `
+        <div class="warning-alert">
+          <strong>⚠️ ${w.severity}:</strong> ${w.message}
+        </div>
+      `).join('');
+
+      const tableRows = campaigns.map(c => `
+        <tr>
+          <td><strong>${c.campaign_name || c.campaign_id}</strong></td>
+          <td>
+            <span class="badge-channel wa-pill">WA: ${c.channels?.whatsapp?.sent || 0}</span>
+            <span class="badge-channel em-pill">EM: ${c.channels?.email?.sent || 0}</span>
+          </td>
+          <td>${(c.channels?.whatsapp?.delivered || 0) + (c.channels?.email?.delivered || 0)}</td>
+          <td>${(c.channels?.whatsapp?.read || 0) + (c.channels?.email?.opened || 0)}</td>
+          <td>${(c.channels?.whatsapp?.replied || 0) + (c.channels?.email?.clicked || 0)}</td>
+          <td>${(c.channels?.whatsapp?.failed || 0) + (c.channels?.email?.bounced || 0)}</td>
+          <td>${(c.channels?.whatsapp?.opted_out || 0) + (c.channels?.email?.unsubscribed || 0)}</td>
+          <td>₹${Number(c.spend?.total_spend || 0).toFixed(2)}</td>
+          <td><span class="badge ${c.delivery_health?.status === 'WARNING' ? 'badge-yellow' : 'badge-green'}">${c.delivery_health?.status || 'HEALTHY'}</span></td>
+        </tr>
+      `).join('');
+
+      container.innerHTML = `
+        <div class="container" style="padding:0;">
+          <!-- Spend Breakdown -->
+          <div class="card">
+            <h2>Cross-Channel Spend Breakdown</h2>
+            <div class="spend-grid">
+              <div class="spend-item">
+                <span class="label">Total Spend</span>
+                <span class="val">₹${Number(spend.total_spend || 0).toFixed(2)}</span>
+              </div>
+              <div class="spend-item">
+                <span class="label">Meta WhatsApp Cost</span>
+                <span class="val">₹${Number(spend.whatsapp_provider_cost || 0).toFixed(2)}</span>
+              </div>
+              <div class="spend-item">
+                <span class="label">Brevo Email Cost</span>
+                <span class="val">₹${Number(spend.email_provider_cost || 0).toFixed(2)}</span>
+              </div>
+              <div class="spend-item highlight-fee">
+                <span class="label">Matrix360 Platform Fee</span>
+                <span class="val">₹${Number(spend.matrix360_platform_fee || 0).toFixed(2)}</span>
+                <small class="fee-note">Transparent 0% markup on direct provider rates</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Deliverability Health -->
+          <div class="card">
+            <div class="panel-header">
+              <h2>Deliverability Health</h2>
+              <span class="badge ${healthBadge}">${health.status}</span>
+            </div>
+            <div class="health-grid">
+              <div class="health-item">
+                <span class="label">Email Bounce Rate</span>
+                <span class="val">${health.rates?.email_bounce_rate_pct ?? 0}%</span>
+                <small class="threshold">Safety Threshold: &le; 5.0%</small>
+              </div>
+              <div class="health-item">
+                <span class="label">Spam Complaint Rate</span>
+                <span class="val">${health.rates?.email_complaint_rate_pct ?? 0}%</span>
+                <small class="threshold">Safety Threshold: &le; 0.1%</small>
+              </div>
+              <div class="health-item">
+                <span class="label">WhatsApp Opt-Out Rate</span>
+                <span class="val">${health.rates?.whatsapp_opt_out_rate_pct ?? 0}%</span>
+                <small class="threshold">Safety Threshold: &le; 3.0%</small>
+              </div>
+            </div>
+            ${warningsHtml}
+          </div>
+
+          <!-- Channel Volume Cards -->
+          <div class="volume-cards-grid">
+            <div class="card channel-card">
+              <h3>WhatsApp Telemetry</h3>
+              <div class="metric-row"><span>Sent:</span> <strong>${wa.sent || 0}</strong></div>
+              <div class="metric-row"><span>Delivered:</span> <strong>${wa.delivered || 0}</strong></div>
+              <div class="metric-row"><span>Read:</span> <strong>${wa.read || 0}</strong></div>
+              <div class="metric-row"><span>Replied:</span> <strong>${wa.replied || 0}</strong></div>
+              <div class="metric-row"><span>Failed:</span> <strong>${wa.failed || 0}</strong></div>
+              <div class="metric-row"><span>Opted Out:</span> <strong>${wa.opted_out || 0}</strong></div>
+            </div>
+
+            <div class="card channel-card">
+              <h3>Email Telemetry</h3>
+              <div class="metric-row"><span>Sent:</span> <strong>${em.sent || 0}</strong></div>
+              <div class="metric-row"><span>Delivered:</span> <strong>${em.delivered || 0}</strong></div>
+              <div class="metric-row"><span>Opened:</span> <strong>${em.opened || 0}</strong></div>
+              <div class="metric-row"><span>Clicked:</span> <strong>${em.clicked || 0}</strong></div>
+              <div class="metric-row"><span>Bounced:</span> <strong>${em.bounced || 0}</strong></div>
+              <div class="metric-row"><span>Unsubscribed:</span> <strong>${em.unsubscribed || 0}</strong></div>
+            </div>
+          </div>
+
+          <!-- Campaigns Table -->
+          <div class="card">
+            <div class="panel-header">
+              <h2>Live Campaigns (${campaigns.length})</h2>
+              <button id="btn-export-csv" class="btn btn-secondary" onclick="exportClientCsv()">Export Client-Safe CSV</button>
+            </div>
+            <table class="analytics-table">
+              <thead>
+                <tr>
+                  <th>Campaign</th>
+                  <th>Channels</th>
+                  <th>Delivered</th>
+                  <th>Opened / Read</th>
+                  <th>Engagement</th>
+                  <th>Failed</th>
+                  <th>Opt-Out</th>
+                  <th>Spend</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${tableRows}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    function exportClientCsv() {
+      const params = new URLSearchParams(window.location.search);
+      const wsId = params.get('workspace_id') || 'default';
+      window.location.href = `/api/marketing?action=analytics_export_csv&workspace_id=${encodeURIComponent(wsId)}`;
+    }
+
+    document.addEventListener('DOMContentLoaded', loadAnalytics);
+  </script>
+</body>
+</html>

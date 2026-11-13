@@ -1,0 +1,550 @@
+{
+  ".gitignore": {
+    "sha256": "71c4960aa33b47523ad02840b631ec291b7469c538442a15cf9df5103619ed44",
+    "source": "Handoff packaging addition, 2026-10-29"
+  },
+  "MAYUR_CODEX_PROMPT.md": {
+    "sha256": "75020a3996f761644dfa80b033328dd4de0d549ef44794fbb35e1991f69bafbd",
+    "source": "Handoff packaging addition, 2026-10-29"
+  },
+  "README_START_HERE.md": {
+    "sha256": "59ae54920b1ec0b12f5c6111b01c9851b904b4eabb5ff60223f0806eea5797ca",
+    "source": "Handoff packaging addition, 2026-10-29"
+  },
+  "START_LOCAL_WINDOWS.cmd": {
+    "sha256": "26167b075adf7d5ab9ccc1e18d70d099d4c99b66d2f8daab4e5ddee48acc843e",
+    "source": "Handoff packaging addition, 2026-10-29"
+  },
+  "VALIDATION.md": {
+    "sha256": "d3f73c745cb8cdb0b6ac53d80f2ba4d6b841993f066fbb4691cd8f52611fcb60",
+    "source": "Handoff packaging addition, 2026-10-29"
+  },
+  "package.json": {
+    "sha256": "9d51ac3e3b5d9ccc9235ad9b05c5312db56b0d9332bdae63a13e14e1b90d8b7a",
+    "source": "Handoff packaging addition, 2026-10-29"
+  },
+  "tools/local-preview.cjs": {
+    "sha256": "b262e6646093d96b1d33b02fc678bdfbef68f0fa1e878c78f5c94304359a6f1d",
+    "source": "Handoff packaging addition, 2026-10-29"
+  },
+  "workstreams/avinash/crm-backend/README.md": {
+    "sha256": "769e3d57987bac59daa628e2e45c40f41a82b7fc95642fe5542a22515961bcde",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/crm-backend/README.md"
+  },
+  "workstreams/avinash/crm-backend/app_cloud.py": {
+    "sha256": "b3150176b4e26b6ab91f9ab5c82c678603f3fe1f68012dcc0aa8225b6658243f",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/crm-backend/app_cloud.py"
+  },
+  "workstreams/avinash/crm-backend/database.py": {
+    "sha256": "357ae6e6c944437b76c52645cde58a5d8ecc527f5a42bda37e05b17c8c5cc4e5",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/crm-backend/database.py"
+  },
+  "workstreams/avinash/crm-backend/matrix360_ai_plans.py": {
+    "sha256": "90202b7b728e5b2a4d89a0e263607951cf6e90984782cbb1e21b9304c21e72d4",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/crm-backend/matrix360_ai_plans.py"
+  },
+  "workstreams/avinash/crm-backend/requirements.txt": {
+    "sha256": "18f71d4c27e7a301c86cbd471d4f65dfb3df5e5b7ff0ce768d6118be481f6a55",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/crm-backend/requirements.txt"
+  },
+  "workstreams/avinash/crm-backend/scraper/__init__.py": {
+    "sha256": "6925f570af7e940c25129136a6cc13770e096e751b79c7d42777fc3e4280d824",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/crm-backend/scraper/__init__.py"
+  },
+  "workstreams/avinash/crm-backend/scraper/enrichment_agent.py": {
+    "sha256": "a49678769157142436e04dffb5de69365aef54a70c616fe9d5580eba899bb8ca",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/crm-backend/scraper/enrichment_agent.py"
+  },
+  "workstreams/avinash/crm-backend/scraper/maps_agent.py": {
+    "sha256": "3fce76b658281bdc0f1f1dda19178fb1c1bdc9844a60da436f8e29f405ade41f",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/crm-backend/scraper/maps_agent.py"
+  },
+  "workstreams/avinash/crm-backend/scraper_database.py": {
+    "sha256": "357ae6e6c944437b76c52645cde58a5d8ecc527f5a42bda37e05b17c8c5cc4e5",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/crm-backend/scraper_database.py"
+  },
+  "workstreams/avinash/crm-backend/scraper_service.py": {
+    "sha256": "78e8b32d737e9c601a34fbd303efc1f0ad6fc2c37626552358cccde27c21cec9",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/crm-backend/scraper_service.py"
+  },
+  "workstreams/avinash/crm-backend/stages.py": {
+    "sha256": "63d59807047e1f189609dc1834e4d6ee62164e2f3fb25211664685ca2d4d5c35",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/crm-backend/stages.py"
+  },
+  "workstreams/avinash/crm-backend/test_layout.py": {
+    "sha256": "d4727ad5b4c68c2af9d5212766677bdb1e9fc3fb07f872d69011949e4ce4b780",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/crm-backend/test_layout.py"
+  },
+  "workstreams/avinash/crm-backend/tests/conftest.py": {
+    "sha256": "f35124ffe13c9a89dcbe00fc9576e64b4c3f5bb7c79a958c563e93518eda704f",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/crm-backend/tests/conftest.py"
+  },
+  "workstreams/avinash/crm-backend/tests/test_ai_native.py": {
+    "sha256": "7564b9b0851ca6ea45494144302d5bf783c2186b4cc856421ae076e34f1d4609",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/crm-backend/tests/test_ai_native.py"
+  },
+  "workstreams/avinash/crm-backend/tests/test_dynamic_tenant_contract.py": {
+    "sha256": "7cb9e9a18771005afd6c472e77d16fefcef52f6c71f1fae1424276ebc10ebbbc",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/crm-backend/tests/test_dynamic_tenant_contract.py"
+  },
+  "workstreams/avinash/crm-backend/tests/test_inference_capacity.py": {
+    "sha256": "ff9a8b38246e27d559df162b6521f3974076aec29cbf71a9a43a726a017e7c5c",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/crm-backend/tests/test_inference_capacity.py"
+  },
+  "workstreams/avinash/crm-backend/tests/test_recovered_dynamic_crm.py": {
+    "sha256": "5a910496c6a5337246e22a50404781600e96d860fd51ce6494554d4eb7d3347e",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/crm-backend/tests/test_recovered_dynamic_crm.py"
+  },
+  "workstreams/avinash/frontend-source/app.html": {
+    "sha256": "6f8c79ae32bf3d29766acc25f835da0c7285e7f2a7865935b58d72879ececf63",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/frontend/app.html"
+  },
+  "workstreams/avinash/frontend-source/client-dashboard.html": {
+    "sha256": "38b9b76b12b06168d03046ca24b08cfc717aa183a5a65c60eab0e5d60079714e",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/frontend/client-dashboard.html"
+  },
+  "workstreams/avinash/frontend-source/client-dashboard.js": {
+    "sha256": "d832ec5cfd9f483b5b7d43859466070b4de9bea4b26245df7d0546f999b128a4",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/frontend/client-dashboard.js"
+  },
+  "workstreams/avinash/frontend-source/index.html": {
+    "sha256": "e197fad23d604dc7b977e1c9b9cc078c4909828f1082a3c676efd34d0060d9dc",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/frontend/index.html"
+  },
+  "workstreams/avinash/frontend-source/login.html": {
+    "sha256": "6402ffb714e389fc7813b865596219c1d3251d09c65917ed3a4bb144d7c9d958",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/frontend/login.html"
+  },
+  "workstreams/avinash/frontend-source/matrix360-ai-plan.js": {
+    "sha256": "59c4e13a3d0ccf2d363a10a38950ac5177a8793671db79a03447dda60f331fa0",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/frontend/matrix360-ai-plan.js"
+  },
+  "workstreams/avinash/frontend-source/matrix360-ai-post.js": {
+    "sha256": "44685490fe7e71f3a52d63bda866fae263a18599a25bbb3441c7667b2018960b",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/frontend/matrix360-ai-post.js"
+  },
+  "workstreams/avinash/frontend-source/matrix360-api-config.js": {
+    "sha256": "287bcebb8560f8b4571458a7580c6f6c00bdbc2e48e5c068809d994bf5d21ebb",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/frontend/matrix360-api-config.js"
+  },
+  "workstreams/avinash/frontend-source/matrix360-brand.js": {
+    "sha256": "6c4ee30e9a83e8acd82225678e7abde70a3401154a0858bf396fd45b3695250d",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/frontend/matrix360-brand.js"
+  },
+  "workstreams/avinash/frontend-source/matrix360-creative.js": {
+    "sha256": "5c775edd68644e7993ad0e9093ab5a32a8afd3dded830a4bb136ed3cf38bfeef",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/frontend/matrix360-creative.js"
+  },
+  "workstreams/avinash/frontend-source/matrix360-crm.js": {
+    "sha256": "da7f4a892af7bba83d558d1f217b7354e2f3d8fb8013e40ca7639baf08046f3c",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/frontend/matrix360-crm.js"
+  },
+  "workstreams/avinash/frontend-source/matrix360-engagement.js": {
+    "sha256": "390e4ad6487d093536637f700be4ad0bfd0ce4cad705856be8879ef685255db7",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/frontend/matrix360-engagement.js"
+  },
+  "workstreams/avinash/frontend-source/matrix360-goal-handoff.js": {
+    "sha256": "d34ed3219dfa904d6592a01e8fce1698198ecfcd0522e75e7f26235964c095ef",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/frontend/matrix360-goal-handoff.js"
+  },
+  "workstreams/avinash/frontend-source/matrix360-growth-brief.js": {
+    "sha256": "a252fee6ea2f9883d6db915d885c0c2689e0949c581cfa94d203953e87134cba",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/frontend/matrix360-growth-brief.js"
+  },
+  "workstreams/avinash/frontend-source/matrix360-login-handoff.js": {
+    "sha256": "d5c0c3dda35cb5929b73f2f07d3c2c2addfd55b355454f17d1eec7f18d8c5563",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/frontend/matrix360-login-handoff.js"
+  },
+  "workstreams/avinash/frontend-source/matrix360-logo-full.png": {
+    "source": "Current workspace logo copied into editable source assets",
+    "sha256": "83544d6cf9f5c7882440ef3ff1393adc2d7f7df068ba4bd1eb519655b8c84e70"
+  },
+  "workstreams/avinash/frontend-source/matrix360-maps-scraper.js": {
+    "sha256": "7aec19dfbcbb7a70526502b50e1788f9bd8e85a8f4e9ca78e52a7de12c89eb5c",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/frontend/matrix360-maps-scraper.js"
+  },
+  "workstreams/avinash/frontend-source/matrix360-media-verify.js": {
+    "sha256": "880093f1e8ba3bc8b210252699f2a31c64571ec537d4302896e3a9418519e67d",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/frontend/matrix360-media-verify.js"
+  },
+  "workstreams/avinash/frontend-source/matrix360-media.js": {
+    "sha256": "1f8abfe3745e05c9d5d8ad1cd63006cc6dfd179e2c06e45e5472708761d580b0",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/frontend/matrix360-media.js"
+  },
+  "workstreams/avinash/frontend-source/matrix360-post-graphic.js": {
+    "sha256": "9f8e09988941d152dae5a0cb8b2d39c44efdffe66b591960e0adb59ffd675d96",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/frontend/matrix360-post-graphic.js"
+  },
+  "workstreams/avinash/frontend-source/matrix360-post-ui.js": {
+    "sha256": "2ea2ef7bafedd23b0b8f156a8ba9cc8e76e9549d2bac5e86b1963d576c9e84b3",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/frontend/matrix360-post-ui.js"
+  },
+  "workstreams/avinash/frontend-source/matrix360-round-logo.css": {
+    "sha256": "e01667b96a95da9cd0cf0fdde96b0c99ca0bb6a6518b224960a087985fdf4280",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/frontend/matrix360-round-logo.css"
+  },
+  "workstreams/avinash/frontend-source/matrix360-round-logo.png": {
+    "sha256": "122ae30776acc3821ef1e22b111402b1e7714cfb9fb7e9f73f73d013592072c8",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/frontend/matrix360-round-logo.png"
+  },
+  "workstreams/avinash/frontend-source/matrix360-ui-theme.css": {
+    "sha256": "8ffc22636b32a50423416de3c1af9911b318d132aed7cc7eb8a9472703427f83",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/frontend/matrix360-ui-theme.css"
+  },
+  "workstreams/avinash/frontend-source/platform.html": {
+    "sha256": "f732f959325c3c09944ee9c4e18933ae422a7faf607803bb6be3cc3458a61060",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/frontend/platform.html"
+  },
+  "workstreams/avinash/frontend-source/pricing.html": {
+    "sha256": "26283a4a4107bbdf48156e65a5893f3bb6f69fda1533e51e340f933f9b2e1f93",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/frontend/pricing.html"
+  },
+  "workstreams/avinash/frontend-source/solutions.html": {
+    "sha256": "19dd9cb0191753e0d932d14795a7a4831cc7d416ccea5a49857a2ca5f95c2ea0",
+    "source": "Checksum-pinned original archive: matrix 360 website v1 (23-10-26)/Matrix360WIP-feature-tanmayi-brand-live-preview-20261022/workstreams/avinash/frontend/solutions.html"
+  },
+  "workstreams/avinash/frontend/.env.example": {
+    "sha256": "96867c3d02b9a16c543840503fa833587f60d848d867c53a43543e4a2eca7302",
+    "source": "Handoff packaging addition, 2026-10-29"
+  },
+  "workstreams/avinash/frontend/.env.local": {
+    "source": "Current workspace environment, included by project-owner request on 2026-10-29",
+    "sha256": "d7bf8176480433be33d301c1fc1537abd7a2eaa38c3640d0a9954fbbfef84755"
+  },
+  "workstreams/avinash/frontend/CONTROL_CENTER_HANDOFF.md": {
+    "sha256": "ce34c9044c12fff8a2fb517065061fa301425ff8f5a8989f871801831f7464b1",
+    "source": "Current workspace: workstreams/avinash/frontend/CONTROL_CENTER_HANDOFF.md"
+  },
+  "workstreams/avinash/frontend/api/ai-post.js": {
+    "sha256": "66b9b807c541d2f57a23be80ca45157ac274fc79a5a1f4be74e36ebfc1726510",
+    "source": "Current workspace: workstreams/avinash/frontend/api/ai-post.js"
+  },
+  "workstreams/avinash/frontend/api/brand.js": {
+    "sha256": "cbed8c498f0438cb0c6f35ecbebc6a8e3ddebf7db6f251a3557004ce3390d0b4",
+    "source": "Current workspace: workstreams/avinash/frontend/api/brand.js"
+  },
+  "workstreams/avinash/frontend/api/control-center.js": {
+    "sha256": "b2579385c0842831e8f7267ae01b04bce2627b6c60d1715b5e7ee1f2bbb88097",
+    "source": "Current workspace: workstreams/avinash/frontend/api/control-center.js"
+  },
+  "workstreams/avinash/frontend/api/creative-integrated.js": {
+    "sha256": "cbe91bc08cd4b1042f8d86765c4659438fbc37e62010201a62c0754da6f8b966",
+    "source": "Current workspace: workstreams/avinash/frontend/api/creative-integrated.js"
+  },
+  "workstreams/avinash/frontend/api/creative-media.js": {
+    "sha256": "8b51325d065748098133611ec258ebfcffa551af50eb38c0e342f2752d316616",
+    "source": "Current workspace: workstreams/avinash/frontend/api/creative-media.js"
+  },
+  "workstreams/avinash/frontend/api/creative.js": {
+    "sha256": "c6ba2f12d935ab399469ad245062f5f41d30ed8692972c327e5d466cbac604eb",
+    "source": "Current workspace: workstreams/avinash/frontend/api/creative.js"
+  },
+  "workstreams/avinash/frontend/api/gateway.js": {
+    "sha256": "48d172e2f9d7b69bcefb7fa6b41f4b2db6d06f8eb4f765530865e489192545ed",
+    "source": "Current workspace: workstreams/avinash/frontend/api/gateway.js"
+  },
+  "workstreams/avinash/frontend/api/maps-js-overlay.js": {
+    "sha256": "6f9d6ddb1c439493c4400571ce82925e178cb297d81799eeb626222c245f4957",
+    "source": "Current workspace: workstreams/avinash/frontend/api/maps-js-overlay.js"
+  },
+  "workstreams/avinash/frontend/api/maps-noguard-v2.js": {
+    "sha256": "92edf782ccc2357c637f5c12c6104bb813b972ade8b321358b54487db92d6097",
+    "source": "Current workspace: workstreams/avinash/frontend/api/maps-noguard-v2.js"
+  },
+  "workstreams/avinash/frontend/api/poster-history.js": {
+    "sha256": "cf3ce14e30eb83f0c63e76031b018ccb5a5a1555a8fb590dba79e0862bc6dde6",
+    "source": "Current workspace: workstreams/avinash/frontend/api/poster-history.js"
+  },
+  "workstreams/avinash/frontend/api/preview.js": {
+    "sha256": "883f07f23c172e3d2e02cfb61384441c8a183629ecbbd5fc5515a0b0970e0574",
+    "source": "Handoff packaging addition, 2026-10-29"
+  },
+  "workstreams/avinash/frontend/api/product-ui.js": {
+    "sha256": "88044809e6beee5adc60dd532c4f933aca1a35eff336744eb530d3dc28273feb",
+    "source": "Current workspace: workstreams/avinash/frontend/api/product-ui.js"
+  },
+  "workstreams/avinash/frontend/lib/channel-copy.js": {
+    "sha256": "2575e83b5a5cf8873c812d2424f5e5c855600e3c710e90fb89be3a2c8384e2f3",
+    "source": "Current workspace: workstreams/avinash/frontend/lib/channel-copy.js"
+  },
+  "workstreams/avinash/frontend/lib/m360-control-client.js": {
+    "sha256": "0323b1c31d192de4522dc1adf4260bef0cdf16fc58eb5852f0b7b9a7d6b3ae7c",
+    "source": "Current workspace: workstreams/avinash/frontend/lib/m360-control-client.js"
+  },
+  "workstreams/avinash/frontend/lib/m360-control-contract.js": {
+    "sha256": "bd05d9d564456c5f3518f18d284f0b4914bbf0ec186b560b985374b40b1a76d1",
+    "source": "Current workspace: workstreams/avinash/frontend/lib/m360-control-contract.js"
+  },
+  "workstreams/avinash/frontend/lib/m360-hotfix-client.js": {
+    "sha256": "5b2bba529dbd7749785d4e912728ed10af9be8ef845c44a35129b76a4659d5bb",
+    "source": "Current workspace: workstreams/avinash/frontend/lib/m360-hotfix-client.js"
+  },
+  "workstreams/avinash/frontend/lib/m360-lead-delete.js": {
+    "sha256": "05ba37a2c4b78f65bbceed80a2baf2777df0d10240eb2ee9b1e777ca65167d13",
+    "source": "Current workspace: workstreams/avinash/frontend/lib/m360-lead-delete.js"
+  },
+  "workstreams/avinash/frontend/lib/m360-leads-orchestrator-server.js": {
+    "sha256": "ac0455e352a30ae25de6c2dbdc790262d3928a4a4a7331693a72add012e96393",
+    "source": "Current workspace: workstreams/avinash/frontend/lib/m360-leads-orchestrator-server.js"
+  },
+  "workstreams/avinash/frontend/lib/m360-multipage-router.js": {
+    "sha256": "52b2bcdd5a372ce293bd636e7f4b987f2886bf22c2c45257ddab38a578ae5e20",
+    "source": "Current workspace: workstreams/avinash/frontend/lib/m360-multipage-router.js"
+  },
+  "workstreams/avinash/frontend/lib/m360-nav-fix.js": {
+    "sha256": "eef52c1b2a0a0304000c1c391ac064af52a122886cb54a968f9d5f9e0e28db6a",
+    "source": "Current workspace: workstreams/avinash/frontend/lib/m360-nav-fix.js"
+  },
+  "workstreams/avinash/frontend/lib/m360-pipeline-remove.js": {
+    "sha256": "6888463508424448ab8093324d6e653e160006512b44fd80b30291fff7a5fdf9",
+    "source": "Current workspace: workstreams/avinash/frontend/lib/m360-pipeline-remove.js"
+  },
+  "workstreams/avinash/frontend/lib/m360-post-client.js": {
+    "sha256": "3979872d7781bab7bed6cc2e40d7d22b32c7f3c33327ce949ada12531614ae41",
+    "source": "Current workspace: workstreams/avinash/frontend/lib/m360-post-client.js"
+  },
+  "workstreams/avinash/frontend/lib/m360-preview-original.js": {
+    "sha256": "3d1741ba2b8f98820e1ef7bb0830ce31596c8748f49f2dd009ca049272582e0d",
+    "source": "Handoff packaging addition, 2026-10-29"
+  },
+  "workstreams/avinash/frontend/lib/m360-product-client.js": {
+    "sha256": "6bd07a2f6f7a6f564ec95ad8e875e86519e2e8134b13b83529b95e6a804552eb",
+    "source": "Current workspace: workstreams/avinash/frontend/lib/m360-product-client.js"
+  },
+  "workstreams/avinash/frontend/lib/m360-scraper-control-guard.js": {
+    "sha256": "649f2f9ef77c1f7fd5f3314a9d798aa3dc154ae438141ef5974a9c365fa74a2e",
+    "source": "Current workspace: workstreams/avinash/frontend/lib/m360-scraper-control-guard.js"
+  },
+  "workstreams/avinash/frontend/lib/m360-unified-leads-subagent.js": {
+    "sha256": "98414dc69347972586d932fed946e11a2796373835526f4a78c091409cfe37c9",
+    "source": "Current workspace: workstreams/avinash/frontend/lib/m360-unified-leads-subagent.js"
+  },
+  "workstreams/avinash/frontend/lib/tanmayi-reel-library.js": {
+    "sha256": "bb63aedbbacde1ca665f1f94d00cff80b14af0e681517e47ac2180f58cbe9568",
+    "source": "Current workspace: workstreams/avinash/frontend/lib/tanmayi-reel-library.js"
+  },
+  "workstreams/avinash/frontend/lib/tanmayi-reel-motion.js": {
+    "sha256": "22e975e13e440f316a54ac92ba6de9955d950d65531d8c894a9ad8e810221323",
+    "source": "Current workspace: workstreams/avinash/frontend/lib/tanmayi-reel-motion.js"
+  },
+  "workstreams/avinash/frontend/matrix360-logo-full.png": {
+    "sha256": "83544d6cf9f5c7882440ef3ff1393adc2d7f7df068ba4bd1eb519655b8c84e70",
+    "source": "Current workspace: workstreams/avinash/frontend/matrix360-logo-full.png"
+  },
+  "workstreams/avinash/frontend/tests/control-center.test.js": {
+    "sha256": "dab4aed1256e0d5373c405d5d53ca7a71ef2e3e4a686697257b2f66cebadcab6",
+    "source": "Current workspace: workstreams/avinash/frontend/tests/control-center.test.js"
+  },
+  "workstreams/avinash/frontend/tests/leads-orchestrator.test.js": {
+    "sha256": "96e93bd6e26d0f0dd7d79e7804be7a04d9b3e9906201f64ed43146297df1f509",
+    "source": "Current workspace: workstreams/avinash/frontend/tests/leads-orchestrator.test.js"
+  },
+  "workstreams/avinash/frontend/vercel.json": {
+    "sha256": "c6d4f7968d1098e2f951e17783f0450d93eeccd96cf0ea2f26ae3501df8f8132",
+    "source": "Current workspace: workstreams/avinash/frontend/vercel.json"
+  },
+  "workstreams/avinash/tools/control-center-live-check.cjs": {
+    "sha256": "b023114a057974ac258c3af412bbd94f1e117a399cffedd12a0c94e9af8bdb7a",
+    "source": "Current workspace: workstreams/avinash/tools/control-center-live-check.cjs"
+  },
+  "workstreams/avinash/tools/control-center-preview.cjs": {
+    "sha256": "1703b3bdfc0b0e7ed66167db9c1d4ee5852bd800336204e3cb2492d4d1011b68",
+    "source": "Current workspace: workstreams/avinash/tools/control-center-preview.cjs"
+  },
+  "workstreams/mayur/MATRIX360_OVERVIEW_LEADS_DEBRIEF_2026-10-28.md": {
+    "sha256": "b08bed7a41e9158b11cb2f3b8bf87f994fb6faa9bc32d3956e45c14f489932ab",
+    "source": "Current workspace: workstreams/mayur/MATRIX360_OVERVIEW_LEADS_DEBRIEF_2026-10-28.md"
+  },
+  "workstreams/mayur/ssscraper/HANDOFF_REPORT.md": {
+    "sha256": "3e377de0326dcb1e046f8d488b136d43c2c0efb1a63b0db1a97e257375d823bf",
+    "source": "Current workspace: workstreams/mayur/ssscraper/HANDOFF_REPORT.md"
+  },
+  "workstreams/mayur/ssscraper/README.md": {
+    "sha256": "6e785bd790f18f614a8a584c87eafd0d4ad7ab74368db998b8e57e0da477b04a",
+    "source": "Current workspace: workstreams/mayur/ssscraper/README.md"
+  },
+  "workstreams/mayur/ssscraper/app/__init__.py": {
+    "sha256": "c943679e4ed4a5b5fc0741027f5ee8e70746fa779d2c5b1cf37b3318009e7fd4",
+    "source": "Current workspace: workstreams/mayur/ssscraper/app/__init__.py"
+  },
+  "workstreams/mayur/ssscraper/app/crawler.py": {
+    "sha256": "7a11ca8650845cac7432102e27a89a2e4769e6442955377d8a4b4006bbeaa202",
+    "source": "Current workspace: workstreams/mayur/ssscraper/app/crawler.py"
+  },
+  "workstreams/mayur/ssscraper/app/main.py": {
+    "sha256": "a3aeaeae38084beb29c6595fe13a24cce98fcc90f755a95d8d8fcf3e9e5e58a6",
+    "source": "Current workspace: workstreams/mayur/ssscraper/app/main.py"
+  },
+  "workstreams/mayur/ssscraper/app/models.py": {
+    "sha256": "c2d4ec404b2ff5c7f1128c6478bbb934cef6c2d595eb1e3ca09d7d8b0d19cf9c",
+    "source": "Current workspace: workstreams/mayur/ssscraper/app/models.py"
+  },
+  "workstreams/mayur/ssscraper/app/pilot.py": {
+    "sha256": "95368389b55c1670d140261341183a827cc5805b958135a8b762329d89e39901",
+    "source": "Current workspace: workstreams/mayur/ssscraper/app/pilot.py"
+  },
+  "workstreams/mayur/ssscraper/app/reprocess.py": {
+    "sha256": "11b04e1546df29fd66ad14edda60380055fe89ca4f9d8d9b8d7a0063abefa9b6",
+    "source": "Current workspace: workstreams/mayur/ssscraper/app/reprocess.py"
+  },
+  "workstreams/mayur/ssscraper/app/rules.py": {
+    "sha256": "c978ca098057f876e2df146680691fb122e96f1cf47c36017649b0d7db21d43e",
+    "source": "Current workspace: workstreams/mayur/ssscraper/app/rules.py"
+  },
+  "workstreams/mayur/ssscraper/app/seed.py": {
+    "sha256": "a8090e81f6041717014d970af9d28dddf7251a6658ab6078a70ba5a51e137e82",
+    "source": "Current workspace: workstreams/mayur/ssscraper/app/seed.py"
+  },
+  "workstreams/mayur/ssscraper/app/static/app.js": {
+    "sha256": "44fcf4aa792f98f9a3a5c21ef4c1db0fa59c03ef9de3272e7123ed38cfc40f92",
+    "source": "Current workspace: workstreams/mayur/ssscraper/app/static/app.js"
+  },
+  "workstreams/mayur/ssscraper/app/static/styles.css": {
+    "sha256": "323b64a0597dde1cb65067353053415d0f4368b2f9648fea24ab88fd92d042c1",
+    "source": "Current workspace: workstreams/mayur/ssscraper/app/static/styles.css"
+  },
+  "workstreams/mayur/ssscraper/app/store.py": {
+    "sha256": "a17a350c01b5a015b39d630808d2d111dd77d5cb465373479d37a40a75e30420",
+    "source": "Current workspace: workstreams/mayur/ssscraper/app/store.py"
+  },
+  "workstreams/mayur/ssscraper/app/templates/index.html": {
+    "sha256": "b52a12f4a7dad9ab86d5197e42bc4eacfc535253cfebbe22309b8f6482a26270",
+    "source": "Current workspace: workstreams/mayur/ssscraper/app/templates/index.html"
+  },
+  "workstreams/mayur/ssscraper/requirements.txt": {
+    "sha256": "ed974969abb0ca6e9ef57509867943531dd907a769a0ec586b4d7ebbe1950468",
+    "source": "Current workspace: workstreams/mayur/ssscraper/requirements.txt"
+  },
+  "workstreams/mayur/ssscraper/tests/test_crawler.py": {
+    "sha256": "d8ba1e1c31b3af20b749dae2f195a405ef8b72a25340961bf39d9e420ee1878d",
+    "source": "Current workspace: workstreams/mayur/ssscraper/tests/test_crawler.py"
+  },
+  "workstreams/mayur/ssscraper/tests/test_rules.py": {
+    "sha256": "8e1e561db25214e4be4070affb43d1ed015f04437e09f7024b164c551be93df6",
+    "source": "Current workspace: workstreams/mayur/ssscraper/tests/test_rules.py"
+  },
+  "workstreams/romit/LOCAL_DEVELOPMENT.md": {
+    "sha256": "4ad4aeebc62b4b4abd6ec2900d9e00a856944a482ea300cbf261e40e4ac2d0d4",
+    "source": "Current workspace: workstreams/romit/LOCAL_DEVELOPMENT.md"
+  },
+  "workstreams/romit/acceptance/.recovered/durability/workstreams/romit/memory/ACCEPTANCE_PROTOCOL.md": {
+    "sha256": "c13cd8e48d2964629a8f614d6b5fd620e9021f1384e4b157bb36881d6a5f8a90",
+    "source": "Current workspace: workstreams/romit/acceptance/.recovered/durability/workstreams/romit/memory/ACCEPTANCE_PROTOCOL.md"
+  },
+  "workstreams/romit/acceptance/.recovered/durability/workstreams/romit/memory/CRM_INTEGRATED_PREVIEW_20261024.md": {
+    "sha256": "4db6679ead3f19fcfe770fe71f03391bd1fae9309e384703b39b9a449bedb2fa",
+    "source": "Current workspace: workstreams/romit/acceptance/.recovered/durability/workstreams/romit/memory/CRM_INTEGRATED_PREVIEW_20261024.md"
+  },
+  "workstreams/romit/acceptance/.recovered/durability/workstreams/romit/memory/README.md": {
+    "sha256": "b455fa40f5c92a983ec38fb38972a3fec8a0ae79a4bdd1498b8971300f085b18",
+    "source": "Current workspace: workstreams/romit/acceptance/.recovered/durability/workstreams/romit/memory/README.md"
+  },
+  "workstreams/romit/acceptance/.recovered/durability/workstreams/romit/memory/THREE_WORKER_OOM_EVIDENCE.md": {
+    "sha256": "335c693832a7c57403ef465a1312e72b8c324947c55c26ddd39ed78c72274bcc",
+    "source": "Current workspace: workstreams/romit/acceptance/.recovered/durability/workstreams/romit/memory/THREE_WORKER_OOM_EVIDENCE.md"
+  },
+  "workstreams/romit/acceptance/.recovered/durability/workstreams/romit/memory/durable_runner.py": {
+    "sha256": "cf5871d26c7e9a01d5bc90f2650721dec02cb135e77d1e3ce18e1972a354790d",
+    "source": "Current workspace: workstreams/romit/acceptance/.recovered/durability/workstreams/romit/memory/durable_runner.py"
+  },
+  "workstreams/romit/acceptance/.recovered/durability/workstreams/romit/memory/low_ram_runtime.py": {
+    "sha256": "11ad7c99378637558ffc9b290e0dfefbb89d9febb6cbefe6e4b6f9f5a253ec84",
+    "source": "Current workspace: workstreams/romit/acceptance/.recovered/durability/workstreams/romit/memory/low_ram_runtime.py"
+  },
+  "workstreams/romit/acceptance/.recovered/durability/workstreams/romit/memory/tests/test_durable_runner.py": {
+    "sha256": "58f27a3ec238b511f82ac2b2d2fb1ac89378198c1fdfaa0b59e79525cf6a4039",
+    "source": "Current workspace: workstreams/romit/acceptance/.recovered/durability/workstreams/romit/memory/tests/test_durable_runner.py"
+  },
+  "workstreams/romit/acceptance/.recovered/durability/workstreams/romit/memory/tests/test_low_ram_runtime.py": {
+    "sha256": "54595941b1726bf88780800dd6cc309babfedc9204bd877b1fdef96160a5cfe0",
+    "source": "Current workspace: workstreams/romit/acceptance/.recovered/durability/workstreams/romit/memory/tests/test_low_ram_runtime.py"
+  },
+  "workstreams/romit/acceptance/.recovered/runtime/original_backend/app_cloud.py": {
+    "sha256": "8c6cdd73def7aada4941bab6587e5acb96f4df35cd8ad0d8a34edc60dbde709e",
+    "source": "Current workspace: workstreams/romit/acceptance/.recovered/runtime/original_backend/app_cloud.py"
+  },
+  "workstreams/romit/acceptance/.recovered/runtime/original_backend/database.py": {
+    "sha256": "357ae6e6c944437b76c52645cde58a5d8ecc527f5a42bda37e05b17c8c5cc4e5",
+    "source": "Current workspace: workstreams/romit/acceptance/.recovered/runtime/original_backend/database.py"
+  },
+  "workstreams/romit/acceptance/.recovered/runtime/original_backend/matrix360_ai_plans.py": {
+    "sha256": "90202b7b728e5b2a4d89a0e263607951cf6e90984782cbb1e21b9304c21e72d4",
+    "source": "Current workspace: workstreams/romit/acceptance/.recovered/runtime/original_backend/matrix360_ai_plans.py"
+  },
+  "workstreams/romit/acceptance/.recovered/runtime/original_backend/scraper/__init__.py": {
+    "sha256": "6925f570af7e940c25129136a6cc13770e096e751b79c7d42777fc3e4280d824",
+    "source": "Current workspace: workstreams/romit/acceptance/.recovered/runtime/original_backend/scraper/__init__.py"
+  },
+  "workstreams/romit/acceptance/.recovered/runtime/original_backend/scraper/enrichment_agent.py": {
+    "sha256": "bbfd2c258a5d7a6782e8a0f28d94bd9fe020c1bb34c6b517792c5c4239717a8d",
+    "source": "Current workspace: workstreams/romit/acceptance/.recovered/runtime/original_backend/scraper/enrichment_agent.py"
+  },
+  "workstreams/romit/acceptance/.recovered/runtime/original_backend/scraper/low_memory_agent.py": {
+    "sha256": "02f015bc5b2fea99d927168454af9b01c7197120967a82dde687062d74876355",
+    "source": "Current workspace: workstreams/romit/acceptance/.recovered/runtime/original_backend/scraper/low_memory_agent.py"
+  },
+  "workstreams/romit/acceptance/.recovered/runtime/original_backend/scraper/maps_agent.py": {
+    "sha256": "3ab8b4461e3aae2a85e33b9e8d9bf096d2465679a54f2fb1f68329653eebf3bb",
+    "source": "Current workspace: workstreams/romit/acceptance/.recovered/runtime/original_backend/scraper/maps_agent.py"
+  },
+  "workstreams/romit/acceptance/.recovered/runtime/original_backend/scraper_database.py": {
+    "sha256": "357ae6e6c944437b76c52645cde58a5d8ecc527f5a42bda37e05b17c8c5cc4e5",
+    "source": "Current workspace: workstreams/romit/acceptance/.recovered/runtime/original_backend/scraper_database.py"
+  },
+  "workstreams/romit/acceptance/.recovered/runtime/original_backend/scraper_service.py": {
+    "sha256": "5b75971f84e5b38eb1697f8e991480af3f32b6ae06ecbefe1b21fa470f8c6489",
+    "source": "Current workspace: workstreams/romit/acceptance/.recovered/runtime/original_backend/scraper_service.py"
+  },
+  "workstreams/romit/acceptance/.recovered/runtime/original_backend/stages.py": {
+    "sha256": "63d59807047e1f189609dc1834e4d6ee62164e2f3fb25211664685ca2d4d5c35",
+    "source": "Current workspace: workstreams/romit/acceptance/.recovered/runtime/original_backend/stages.py"
+  },
+  "workstreams/romit/acceptance/.recovered/runtime/original_backend/test_layout.py": {
+    "sha256": "d4727ad5b4c68c2af9d5212766677bdb1e9fc3fb07f872d69011949e4ce4b780",
+    "source": "Current workspace: workstreams/romit/acceptance/.recovered/runtime/original_backend/test_layout.py"
+  },
+  "workstreams/romit/acceptance/.recovered/runtime/original_backend/tests/conftest.py": {
+    "sha256": "f35124ffe13c9a89dcbe00fc9576e64b4c3f5bb7c79a958c563e93518eda704f",
+    "source": "Current workspace: workstreams/romit/acceptance/.recovered/runtime/original_backend/tests/conftest.py"
+  },
+  "workstreams/romit/acceptance/.recovered/runtime/original_backend/tests/test_ai_native.py": {
+    "sha256": "7564b9b0851ca6ea45494144302d5bf783c2186b4cc856421ae076e34f1d4609",
+    "source": "Current workspace: workstreams/romit/acceptance/.recovered/runtime/original_backend/tests/test_ai_native.py"
+  },
+  "workstreams/romit/acceptance/.recovered/runtime/original_backend/tests/test_dynamic_tenant_contract.py": {
+    "sha256": "7cb9e9a18771005afd6c472e77d16fefcef52f6c71f1fae1424276ebc10ebbbc",
+    "source": "Current workspace: workstreams/romit/acceptance/.recovered/runtime/original_backend/tests/test_dynamic_tenant_contract.py"
+  },
+  "workstreams/romit/acceptance/.recovered/runtime/original_backend/tests/test_inference_capacity.py": {
+    "sha256": "ff9a8b38246e27d559df162b6521f3974076aec29cbf71a9a43a726a017e7c5c",
+    "source": "Current workspace: workstreams/romit/acceptance/.recovered/runtime/original_backend/tests/test_inference_capacity.py"
+  },
+  "workstreams/romit/acceptance/.recovered/runtime/original_backend/tests/test_recovered_dynamic_crm.py": {
+    "sha256": "5a910496c6a5337246e22a50404781600e96d860fd51ce6494554d4eb7d3347e",
+    "source": "Current workspace: workstreams/romit/acceptance/.recovered/runtime/original_backend/tests/test_recovered_dynamic_crm.py"
+  },
+  "workstreams/romit/acceptance/.recovered/runtime/preview_app.py": {
+    "sha256": "017f2dbd1bd89dbfca41741ababf2f2fa9382f3a0366f9a826eb29bc97036a9e",
+    "source": "Current workspace: workstreams/romit/acceptance/.recovered/runtime/preview_app.py"
+  },
+  "workstreams/romit/acceptance/ROMIT_ACCEPTANCE_EXECUTION_20261026.md": {
+    "sha256": "ca1a1fefc3740c0cdee0f97dfce98df24e1fd4ec32d02fccc0770e211102bfb1",
+    "source": "Current workspace: workstreams/romit/acceptance/ROMIT_ACCEPTANCE_EXECUTION_20261026.md"
+  },
+  "workstreams/romit/acceptance/packaged-source-manifest.json": {
+    "sha256": "5b9e819e96f2097e41f796de67bab53af8b795be40593a200cc09b6bb2d952e7",
+    "source": "Current workspace: workstreams/romit/acceptance/packaged-source-manifest.json"
+  },
+  "workstreams/romit/acceptance/recover_candidate.py": {
+    "sha256": "0ea87e8a57f8606463ef221e0c4e191b5b854f94d574dcde33b77212efcaac35",
+    "source": "Current workspace: workstreams/romit/acceptance/recover_candidate.py"
+  },
+  "workstreams/romit/acceptance/test_runtime.py": {
+    "sha256": "18048e335e33e71d0c182db85f2514ca11c946c8444bd3cfae624e934b58e894",
+    "source": "Current workspace: workstreams/romit/acceptance/test_runtime.py"
+  },
+  "workstreams/romit/vercel-recovery/dpl_AiuAnMhU3n4YxdKLfMJ8odoYDtEn/start-exact-local.ps1": {
+    "sha256": "ba9a949aee47179da26167b49c0bec7feb1e6e8895f1e6a4376134b48d38413c",
+    "source": "Current workspace: workstreams/romit/vercel-recovery/dpl_AiuAnMhU3n4YxdKLfMJ8odoYDtEn/start-exact-local.ps1"
+  }
+}

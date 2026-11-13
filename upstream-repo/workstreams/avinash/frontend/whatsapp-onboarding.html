@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connect WhatsApp Business — Matrix360</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: #111827;
+      --border: #1f2937;
+      --text: #f9fafb;
+      --text-muted: #9ca3af;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --whatsapp-green: #10b981;
+      --whatsapp-hover: #059669;
+      --danger-bg: #450a0a;
+      --danger-border: #991b1b;
+      --danger-text: #fca5a5;
+      --warning-bg: #451a03;
+      --warning-border: #9a3412;
+      --warning-text: #fdba74;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; max-width: 540px; width: 100%; padding: 2.25rem; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5); }
+    .badge { display: inline-flex; align-items: center; gap: 0.375rem; font-size: 0.8125rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.25rem 0.625rem; border-radius: 9999px; background: rgba(16, 185, 129, 0.15); color: var(--whatsapp-green); margin-bottom: 1rem; }
+    h1 { font-size: 1.625rem; font-weight: 700; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+    .subtitle { color: var(--text-muted); font-size: 0.9375rem; line-height: 1.5; margin-bottom: 1.75rem; }
+    
+    .status-box { padding: 1rem; border-radius: 8px; font-size: 0.875rem; line-height: 1.5; margin-bottom: 1.5rem; display: none; }
+    .status-box.warning { display: block; background: var(--warning-bg); border: 1px solid var(--warning-border); color: var(--warning-text); }
+    .status-box.error { display: block; background: var(--danger-bg); border: 1px solid var(--danger-border); color: var(--danger-text); }
+    .status-box.success { display: block; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: #6ee7b7; }
+
+    .btn { display: inline-flex; align-items: center; justify-content: center; width: 100%; padding: 0.875rem 1.25rem; border-radius: 8px; font-size: 0.9375rem; font-weight: 600; cursor: pointer; border: none; transition: background-color 0.15s ease; gap: 0.5rem; }
+    .btn-whatsapp { background: var(--whatsapp-green); color: #ffffff; }
+    .btn-whatsapp:hover:not(:disabled) { background: var(--whatsapp-hover); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .steps-list { margin-top: 1.75rem; border-top: 1px solid var(--border); padding-top: 1.5rem; }
+    .steps-list h2 { font-size: 0.8125rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em; margin-bottom: 0.75rem; }
+    .step-item { display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.875rem; color: var(--text-muted); margin-bottom: 0.625rem; }
+    .step-num { width: 1.25rem; height: 1.25rem; border-radius: 50%; background: #1f2937; color: #d1d5db; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border);">
+      <a href="client-dashboard.html" style="display:inline-flex;align-items:center;gap:6px;color:#38bdf8;text-decoration:none;font-size:0.875rem;font-weight:600;">← Back to Dashboard</a>
+      <div style="display:flex;align-items:center;gap:8px;font-size:0.8125rem;">
+        <a href="whatsapp-status.html" style="color:#10b981;text-decoration:none;">Live Status →</a>
+      </div>
+    </div>
+    <div class="badge">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.04 14.69 2 12.04 2Z"/></svg>
+      Meta Tech Provider
+    </div>
+    
+    <h1>Connect Your WhatsApp Number</h1>
+    <p class="subtitle">
+      Log in with Facebook to select your WhatsApp Business portfolio and connect your official business phone number in seconds.
+    </p>
+
+    <div id="statusBox" class="status-box"></div>
+
+    <button id="connectBtn" class="btn btn-whatsapp" disabled>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.04 14.69 2 12.04 2Z"/></svg>
+      <span id="btnText">Checking Configuration...</span>
+    </button>
+
+    <div class="steps-list">
+      <h2>What happens next:</h2>
+      <div class="step-item">
+        <span class="step-num">1</span>
+        <span>Meta's popup will open to select or create your WhatsApp Business Account.</span>
+      </div>
+      <div class="step-item">
+        <span class="step-num">2</span>
+        <span>You will verify your phone number via SMS or voice code.</span>
+      </div>
+      <div class="step-item">
+        <span class="step-num">3</span>
+        <span>Your number is immediately linked to your Matrix360 workspace for compliant outreach.</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function getAuthToken() {
+      try {
+        const val = sessionStorage.getItem('matrix360_pilot_token') || localStorage.getItem('m360_token') || localStorage.getItem('matrix360_pilot_token');
+        if (val) return val;
+        if (sessionStorage.getItem('matrix360_showcase') === 'true' || window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') {
+          return 'matrix360-isolated-showcase';
+        }
+        return '';
+      } catch {
+        return 'matrix360-isolated-showcase';
+      }
+    }
+
+    const statusBox = document.getElementById('statusBox');
+    const connectBtn = document.getElementById('connectBtn');
+    const btnText = document.getElementById('btnText');
+
+    // Retrieve active workspace ID from URL or sessionStorage
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = getAuthToken();
+    const defaultWs = token === 'matrix360-isolated-showcase' ? 'showcase' : 'lakhotia';
+    const workspaceId = urlParams.get('workspace_id') || sessionStorage.getItem('m360_active_workspace') || sessionStorage.getItem('matrix360_active_workspace') || defaultWs;
+
+    let metaConfig = null;
+
+    async function checkMetaConfiguration() {
+      try {
+        const token = getAuthToken();
+        const headers = token ? { 'Authorization': 'Bearer ' + token, 'Accept': 'application/json' } : { 'Accept': 'application/json' };
+        const res = await fetch(`/api/marketing/whatsapp/onboarding/config?workspace_id=${encodeURIComponent(workspaceId)}`, { headers });
+        const data = await res.json();
+        metaConfig = data.config || data;
+
+        if (!metaConfig || !metaConfig.configured) {
+          const missing = (metaConfig && metaConfig.missing_config) ? metaConfig.missing_config.join(', ') : 'META_APP_ID, META_EMBEDDED_SIGNUP_CONFIG_ID';
+          statusBox.className = 'status-box warning';
+          statusBox.innerHTML = `<strong>Setup incomplete on server:</strong> Missing <code>${missing}</code> in environment. Embedded Signup cannot launch until these variables are configured.`;
+          btnText.textContent = 'Setup Not Finished';
+          connectBtn.disabled = true;
+          return;
+        }
+
+        // Initialize Meta SDK
+        loadMetaSdk(metaConfig.meta_app_id, metaConfig.meta_graph_version || 'v21.0');
+      } catch (err) {
+        statusBox.className = 'status-box error';
+        statusBox.textContent = 'Failed to connect to Matrix360 marketing API: ' + err.message;
+        btnText.textContent = 'Connection Error';
+        connectBtn.disabled = true;
+      }
+    }
+
+    function loadMetaSdk(appId, version) {
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId: appId,
+          autoLogAppEvents: true,
+          xfbml: true,
+          version: version
+        });
+        connectBtn.disabled = false;
+        btnText.textContent = 'Connect WhatsApp Business Number';
+      };
+
+      const js = document.createElement('script');
+      js.id = 'facebook-jssdk';
+      js.src = 'https://connect.facebook.net/en_US/sdk.js';
+      document.body.appendChild(js);
+    }
+
+    connectBtn.addEventListener('click', () => {
+      if (!metaConfig || !metaConfig.configured) return;
+      connectBtn.disabled = true;
+      btnText.textContent = 'Opening Meta Login...';
+
+      // Launch official Meta Embedded Signup via FB.login
+      FB.login(function(response) {
+        if (response.authResponse && response.authResponse.code) {
+          btnText.textContent = 'Exchanging Authorization Code...';
+          exchangeCode(response.authResponse.code);
+        } else {
+          statusBox.className = 'status-box error';
+          statusBox.textContent = 'Meta login was cancelled or did not return an authorization code.';
+          btnText.textContent = 'Connect WhatsApp Business Number';
+          connectBtn.disabled = false;
+        }
+      }, {
+        config_id: metaConfig.meta_embedded_signup_config_id,
+        response_type: 'code',
+        override_default_response_type: true,
+        extras: {
+          setup: {},
+          featureType: '',
+          sessionInfoVersion: '2'
+        }
+      });
+    });
+
+    async function exchangeCode(code) {
+      try {
+        const token = getAuthToken();
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = 'Bearer ' + token;
+        const res = await fetch('/api/marketing/whatsapp/onboarding/exchange', {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ code: code, workspace_id: workspaceId })
+        });
+        const result = await res.json();
+
+        if (res.ok && result.status === 'ok') {
+          statusBox.className = 'status-box success';
+          statusBox.innerHTML = `<strong>✓ Account Connected!</strong><br>WABA ID: <code>${result.waba_id}</code><br>Phone ID: <code>${result.phone_number_id}</code><br>State: <code>${result.state}</code>`;
+          btnText.textContent = 'WhatsApp Connected';
+        } else {
+          statusBox.className = 'status-box error';
+          statusBox.innerHTML = `<strong>Exchange Failed:</strong> ${result.message || result.error || 'Server rejected token exchange.'}`;
+          connectBtn.disabled = false;
+          btnText.textContent = 'Try Again';
+        }
+      } catch (err) {
+        statusBox.className = 'status-box error';
+        statusBox.textContent = 'Network error while exchanging authorization code: ' + err.message;
+        connectBtn.disabled = false;
+        btnText.textContent = 'Try Again';
+      }
+    }
+
+    // Initialize check on load
+    checkMetaConfiguration();
+  </script>
+</body>
+</html>

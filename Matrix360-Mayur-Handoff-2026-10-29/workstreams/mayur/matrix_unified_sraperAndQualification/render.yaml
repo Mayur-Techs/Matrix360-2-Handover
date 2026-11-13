@@ -1,0 +1,38 @@
+# Render Blueprint — Matrix 360 Autonomous Lead Discovery & Web Crawler Engine
+# Free Tier Native: uses python runtime (or docker) without paid disk requirement.
+# Cloud persistence is handled seamlessly via Supabase PostgreSQL.
+services:
+  - type: web
+    name: matrix360-crawler-api
+    runtime: python
+    plan: free
+    region: oregon
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
+    startCommand: uvicorn services.api.app:app --host 0.0.0.0 --port $PORT --workers 1
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.14
+      - key: APP_ENV
+        value: production
+      - key: MATRIX_DEPLOYMENT_MODE
+        value: cloud
+      - key: MATRIX_COOKIE_SECURE
+        value: "true"
+      - key: MATRIX_AUTH_REQUIRED
+        value: "true"
+      - key: MATRIX_SESSION_SECRET
+        generateValue: true
+      - key: MATRIX_LOCAL_USERNAME
+        value: admin
+      - key: MATRIX_LOCAL_PASSWORD
+        generateValue: true
+      - key: MATRIX_LOCAL_TENANT_ID
+        value: matrix360-prod
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false

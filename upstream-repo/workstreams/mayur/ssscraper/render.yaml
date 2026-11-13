@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: lead-research-agent
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: standard
+    envVars:
+      - key: PORT
+        value: 8012
+      - key: LEAD_AI_API_KEY
+        sync: false
+      - key: LEAD_AI_MODEL
+        value: gpt-4o-mini
+      - key: GOOGLE_MAPS_API_KEY
+        sync: false
+    disk:
+      name: lead-data
+      mountPath: /app/data
+      sizeGB: 5

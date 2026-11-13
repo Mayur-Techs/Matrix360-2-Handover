@@ -1,0 +1,97 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Matrix360_HandoverEnvelope",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "envelope_id",
+    "correlation_id",
+    "workspace_id",
+    "origin_module",
+    "target_engine",
+    "status",
+    "timestamp"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["1.0"]
+    },
+    "envelope_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique identifier for this discrete message transmission."
+    },
+    "correlation_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Shared trace identifier spanning Overview, Marketing, Leads, and Content."
+    },
+    "parent_task_id": {
+      "type": ["string", "null"],
+      "description": "Parent task reference when decomposing compound multi-engine operations."
+    },
+    "workspace_id": {
+      "type": "string",
+      "description": "Server-validated tenant identifier (e.g. shree_heights, lakhotia, vrindavan_greens)."
+    },
+    "origin_module": {
+      "type": "string",
+      "enum": ["overview", "control_center", "marketing", "leads", "content"]
+    },
+    "target_engine": {
+      "type": "string",
+      "enum": ["overview", "control_center", "marketing", "lead_pipeline", "content_creation", "leads", "content"]
+    },
+    "artifact_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type"],
+        "properties": {
+          "id": { "type": "string" },
+          "type": { "type": "string", "enum": ["lead_snapshot", "image_asset", "video_reel", "copy_draft", "campaign_brief"] },
+          "url": { "type": "string" }
+        }
+      }
+    },
+    "idempotency_key": {
+      "type": "string",
+      "description": "Deterministic key preventing duplicate campaign executions or side-effects."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "accepted",
+        "requesting_leads",
+        "audience_received",
+        "requesting_content",
+        "assets_ready",
+        "draft_ready",
+        "review_pending",
+        "completed",
+        "blocked",
+        "failed",
+        "cancelled"
+      ]
+    },
+    "payload": {
+      "type": "object",
+      "properties": {
+        "prompt": { "type": "string" },
+        "selected_channels": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "profile_type": {
+          "type": "string",
+          "enum": ["b2b_industrial", "b2c_affinity"]
+        }
+      }
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

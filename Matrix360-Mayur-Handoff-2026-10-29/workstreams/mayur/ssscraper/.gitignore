@@ -1,0 +1,19 @@
+# Local runtime state and crawl artifacts
+output/
+data/jobs.sqlite3
+.env
+.env.*
+!.env.example
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Python caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+*.egg-info/

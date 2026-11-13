@@ -1,0 +1,24 @@
+{
+  "contract": "A first-time user can describe a campaign, review grounded channel copy, preview drafts, understand consent/provider state and find the controlled test-email action without developer terminology.",
+  "targetViewports": ["1440x900", "390x844"],
+  "accessibility": {
+    "status": "pass",
+    "evidence": "Rendered accessibility tree exposes labeled campaign input, channel controls, approval, preview, calendar navigation and test-email field; focus styles and live status regions remain present."
+  },
+  "responsive": {
+    "status": "pass",
+    "evidence": "Desktop uses the scannable multi-column layout; 390x844 uses single-column content and swipeable page pills without a visible scrollbar."
+  },
+  "contentStates": {
+    "loading": { "status": "pass", "evidence": "Status text and spinner announce AI and provider work." },
+    "empty": { "status": "pass", "evidence": "No-task and no-audience states explain the next action." },
+    "error": { "status": "pass", "evidence": "Brevo rejection identifies the SMTP login/key and gives the recovery path." },
+    "partial": { "status": "pass", "evidence": "Campaign drafts remain reviewable while audience or providers are unavailable." },
+    "success": { "status": "pass", "evidence": "Draft preview confirms that nothing was sent; provider acceptance remains distinct from delivery." },
+    "permission": { "status": "pass", "evidence": "Bulk sends retain consent and provider gates; controlled email clearly states its one-address boundary." }
+  },
+  "renderedEvidence": [
+    { "viewport": "1440x900", "artifact": "desktop-1440x900.txt", "observation": "Guided workflow and dark-theme Marketing surface rendered with no console errors." },
+    { "viewport": "390x844", "artifact": "mobile-390x844.txt", "observation": "Single-column mobile rendering preserved readable headings and touch controls." }
+  ]
+}

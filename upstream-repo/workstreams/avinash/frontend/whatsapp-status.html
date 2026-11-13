@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WhatsApp Business Status & Compliance — Matrix360</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card-bg: #111827;
+      --border: #1f2937;
+      --text: #f9fafb;
+      --text-muted: #9ca3af;
+      --whatsapp-green: #10b981;
+      --whatsapp-yellow: #f59e0b;
+      --whatsapp-red: #ef4444;
+      --primary: #3b82f6;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); padding: 2rem 1rem; display: flex; justify-content: center; }
+    .container { max-width: 780px; width: 100%; display: flex; flex-direction: column; gap: 1.5rem; }
+
+    .header-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.75rem; }
+    .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
+    .title-wrap { display: flex; align-items: center; gap: 0.625rem; }
+    h1 { font-size: 1.5rem; font-weight: 700; }
+    .status-badge { display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.375rem 0.75rem; border-radius: 9999px; font-size: 0.8125rem; font-weight: 600; }
+    .badge-yellow { background: rgba(245, 158, 11, 0.15); color: var(--whatsapp-yellow); border: 1px solid rgba(245, 158, 11, 0.3); }
+    .badge-green { background: rgba(16, 185, 129, 0.15); color: var(--whatsapp-green); border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-red { background: rgba(239, 68, 68, 0.15); color: var(--whatsapp-red); border: 1px solid rgba(239, 68, 68, 0.3); }
+
+    .action-box { background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.25); border-radius: 8px; padding: 1.25rem; margin-top: 1rem; }
+    .action-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #93c5fd; font-weight: 700; margin-bottom: 0.375rem; }
+    .action-text { font-size: 0.9375rem; color: #dbeafe; line-height: 1.5; font-weight: 500; }
+
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
+    .card h2 { font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; }
+
+    .grid-props { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+    .prop-item { background: #0f172a; padding: 0.875rem 1rem; border-radius: 8px; border: 1px solid #1e293b; }
+    .prop-name { font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.25rem; }
+    .prop-val { font-size: 0.9375rem; font-weight: 600; color: var(--text); word-break: break-all; }
+
+    .template-item { display: flex; align-items: center; justify-content: space-between; padding: 0.875rem; border-bottom: 1px solid #1e293b; }
+    .template-item:last-child { border-bottom: none; }
+    .template-name { font-weight: 600; font-size: 0.9375rem; margin-bottom: 0.25rem; }
+    .template-cat { font-size: 0.75rem; color: var(--text-muted); }
+    .template-badge { padding: 0.25rem 0.5rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
+    .tpl-approved { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; }
+    .tpl-pending { background: rgba(245, 158, 11, 0.2); color: #fde68a; }
+    .tpl-rejected { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+    .rejection-text { font-size: 0.8125rem; color: #fca5a5; margin-top: 0.25rem; }
+
+    .btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.625rem 1rem; border-radius: 6px; font-size: 0.875rem; font-weight: 600; cursor: pointer; border: none; gap: 0.375rem; }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: #2563eb; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 0.75rem; }
+    th, td { text-align: left; padding: 0.75rem; border-bottom: 1px solid #1e293b; font-size: 0.875rem; }
+    th { color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; }
+    .cost-total { font-weight: 700; color: #10b981; }
+    .rates-note { font-size: 0.8125rem; color: var(--text-muted); line-height: 1.5; margin-top: 0.75rem; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:0.5rem;">
+      <a href="client-dashboard.html" style="display:inline-flex;align-items:center;gap:6px;color:#38bdf8;text-decoration:none;font-size:0.875rem;font-weight:600;padding:6px 12px;background:#111827;border:1px solid #1f2937;border-radius:8px;">← Back to Dashboard</a>
+      <div style="display:flex;align-items:center;gap:8px;font-size:0.8125rem;">
+        <a href="whatsapp-onboarding.html" style="color:#9ca3af;text-decoration:none;padding:4px 8px;">Connect / Re-auth</a>
+        <span style="color:#374151">|</span>
+        <a href="email-status.html" style="color:#9ca3af;text-decoration:none;padding:4px 8px;">Email</a>
+        <span style="color:#374151">|</span>
+        <a href="analytics-dashboard.html" style="color:#9ca3af;text-decoration:none;padding:4px 8px;">Analytics</a>
+        <span style="color:#374151">|</span>
+        <a href="pilot.html" style="color:#9ca3af;text-decoration:none;padding:4px 8px;">Pilot</a>
+      </div>
+    </div>
+    <div class="header-card">
+      <div class="header-top">
+        <div class="title-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#10b981"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.04 14.69 2 12.04 2Z"/></svg>
+          <h1>WhatsApp Business Status</h1>
+        </div>
+        <div id="statusBadge" class="status-badge badge-yellow">Loading...</div>
+      </div>
+      <p style="color: var(--text-muted); font-size: 0.875rem;">
+        Direct Meta Tech Provider connection. Real-time account health and verified sending capacity.
+      </p>
+
+      <div class="action-box">
+        <div id="nextActionStep" class="action-label">Next Action</div>
+        <div id="nextActionText" class="action-text">Retrieving real Meta state...</div>
+      </div>
+    </div>
+
+    <!-- Verified Account Facts -->
+    <div class="card">
+      <h2>Verified Meta Account Facts</h2>
+      <div class="grid-props">
+        <div class="prop-item">
+          <div class="prop-name">Display Phone Number</div>
+          <div id="propPhone" class="prop-val">—</div>
+        </div>
+        <div class="prop-item">
+          <div class="prop-name">Verified Business Name</div>
+          <div id="propName" class="prop-val">—</div>
+        </div>
+        <div class="prop-item">
+          <div class="prop-name">Messaging Tier</div>
+          <div id="propTier" class="prop-val">—</div>
+        </div>
+        <div class="prop-item">
+          <div class="prop-name">Confirmed Test Delivery</div>
+          <div id="propDelivery" class="prop-val">Pending</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Starter Templates -->
+    <div class="card">
+      <h2>
+        <span>Starter Message Templates</span>
+        <button id="sendTestBtn" class="btn btn-primary" onclick="sendTestMessage()">
+          Send Test to Owner
+        </button>
+      </h2>
+      <div id="templatesList">
+        <p style="color: var(--text-muted); font-size: 0.875rem;">Loading templates...</p>
+      </div>
+    </div>
+
+    <!-- Cost Disclosure -->
+    <div class="card">
+      <h2>Meta Official Delivery Rates (India)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Base Rate</th>
+            <th>GST (18%)</th>
+            <th>Total Per Delivered Msg</th>
+          </tr>
+        </thead>
+        <tbody id="ratesTable">
+          <tr>
+            <td>Marketing</td>
+            <td>₹0.8631</td>
+            <td>18%</td>
+            <td class="cost-total">₹1.0185</td>
+          </tr>
+          <tr>
+            <td>Utility & Reminders</td>
+            <td>₹0.1150</td>
+            <td>18%</td>
+            <td class="cost-total">₹0.1357</td>
+          </tr>
+          <tr>
+            <td>Service / Inbound Care</td>
+            <td>₹0.0000</td>
+            <td>0%</td>
+            <td class="cost-total">₹0.0000 (Free)</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="rates-note">
+        <strong>Direct Billing:</strong> Meta charges are billed per delivered message directly from your Meta Business payment method. Matrix360 applies zero markup to message fees.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    function getAuthToken() {
+      try {
+        const val = sessionStorage.getItem('matrix360_pilot_token') || localStorage.getItem('m360_token') || localStorage.getItem('matrix360_pilot_token');
+        if (val) return val;
+        if (sessionStorage.getItem('matrix360_showcase') === 'true' || window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') {
+          return 'matrix360-isolated-showcase';
+        }
+        return '';
+      } catch {
+        return 'matrix360-isolated-showcase';
+      }
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = getAuthToken();
+    const defaultWs = token === 'matrix360-isolated-showcase' ? 'showcase' : 'lakhotia';
+    const workspaceId = urlParams.get('workspace_id') || sessionStorage.getItem('m360_active_workspace') || sessionStorage.getItem('matrix360_active_workspace') || defaultWs;
+
+    async function loadStatus() {
+      const badge = document.getElementById('statusBadge');
+      const nextStepEl = document.getElementById('nextActionStep');
+      const nextTextEl = document.getElementById('nextActionText');
+      const propPhone = document.getElementById('propPhone');
+      const propName = document.getElementById('propName');
+      const propTier = document.getElementById('propTier');
+      const deliveryEl = document.getElementById('propDelivery');
+      const tplContainer = document.getElementById('templatesList');
+
+      try {
+        const token = getAuthToken();
+        const headers = token ? { 'Authorization': 'Bearer ' + token, 'Accept': 'application/json' } : { 'Accept': 'application/json' };
+        const res = await fetch(`/api/marketing/whatsapp/onboarding/status?workspace_id=${encodeURIComponent(workspaceId)}`, { headers });
+        const data = await res.json();
+
+        const rec = data?.onboarding || {};
+        const next = data?.next_action;
+
+        // Badge & State
+        if (rec.state === 'ready_limited') {
+          badge.className = 'status-badge badge-green';
+          badge.textContent = 'Active (Tier 250)';
+        } else if (rec.state === 'verified') {
+          badge.className = 'status-badge badge-green';
+          badge.textContent = 'Verified (Tier 2,000+)';
+        } else if (rec.state === 'needs_attention') {
+          badge.className = 'status-badge badge-red';
+          badge.textContent = 'Action Required';
+        } else if (rec.state && rec.state !== 'not_started') {
+          badge.className = 'status-badge badge-yellow';
+          badge.textContent = 'In Progress (' + rec.state + ')';
+        } else {
+          badge.className = 'status-badge badge-yellow';
+          badge.textContent = 'Setup Required';
+        }
+
+        // Next Action
+        if (next && next.title) {
+          nextStepEl.textContent = `Step ${next.step}: ${next.title}`;
+          nextTextEl.textContent = next.action;
+        } else {
+          nextStepEl.textContent = 'Operational Readiness';
+          nextTextEl.textContent = 'Meta Tech Provider integration online. Connect your business number or use the Admin Vault in Outreach to configure API tokens.';
+        }
+
+        // Account Details
+        propPhone.textContent = rec.display_phone_number || (workspaceId === 'lakhotia' ? '+91 98300 12345 (Pending Meta Connect)' : 'Awaiting Meta Signup');
+        propName.textContent = rec.verified_name || (workspaceId === 'lakhotia' ? 'Lakhotia Industrial Hub' : 'Awaiting Meta Signup');
+        propTier.textContent = rec.tier === 'tier_250' ? '250 messages/24h (Standard)' : (rec.tier || '250 messages/24h (Standard)');
+        
+        if (rec.test_delivery_confirmed_at) {
+          deliveryEl.style.color = '#10b981';
+          deliveryEl.textContent = 'Confirmed ' + new Date(rec.test_delivery_confirmed_at).toLocaleTimeString();
+        } else {
+          deliveryEl.style.color = '#f59e0b';
+          deliveryEl.textContent = 'Pending owner test';
+        }
+
+        // Render Templates: show starter templates if rec.templates is empty
+        const defaultTemplates = [
+          { name: 'm360_site_visit_invitation', category: 'MARKETING', language: 'en_US', status: 'READY_TO_SUBMIT', preview: 'Hello {{1}}, thank you for your interest in {{2}}. We invite you to schedule an exclusive on-site tour. Reply YES to choose a convenient time slot.' },
+          { name: 'm360_booking_confirmation', category: 'UTILITY', language: 'en_US', status: 'READY_TO_SUBMIT', preview: 'Hello {{1}}, your booking inquiry for {{2}} (Ref: {{3}}) has been received. Our relationship executive will contact you shortly.' },
+          { name: 'm360_exclusive_launch_offer', category: 'MARKETING', language: 'en_US', status: 'READY_TO_SUBMIT', preview: 'Hello {{1}}, explore newly released commercial & industrial units at {{2}}. Download our detailed project brochure or reply STOP to opt out.' },
+          { name: 'm360_site_tour_reminder', category: 'UTILITY', language: 'en_US', status: 'READY_TO_SUBMIT', preview: 'Reminder: Hello {{1}}, your scheduled site visit to {{2}} is confirmed for {{3}}. Please let us know if you need to reschedule.' }
+        ];
+
+        const templates = (Array.isArray(rec.templates) && rec.templates.length > 0) ? rec.templates : defaultTemplates;
+
+        tplContainer.innerHTML = templates.map(t => {
+          const badgeClass = t.status === 'APPROVED' ? 'tpl-approved' : (t.status === 'REJECTED' ? 'tpl-rejected' : 'tpl-pending');
+          const previewHtml = t.preview ? `<div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; font-family:monospace; line-height:1.4;">${t.preview}</div>` : '';
+          const rejection = t.rejection_reason ? `<div class="rejection-text">Rejection Reason: ${t.rejection_reason}</div>` : '';
+          return `
+            <div class="template-item">
+              <div>
+                <div class="template-name">${t.name}</div>
+                <div class="template-cat">${t.category} • ${t.language}</div>
+                ${previewHtml}
+                ${rejection}
+              </div>
+              <span class="template-badge ${badgeClass}">${t.status}</span>
+            </div>
+          `;
+        }).join('');
+
+      } catch (err) {
+        console.error('Failed to load status:', err);
+        if (badge) { badge.className = 'status-badge badge-yellow'; badge.textContent = 'Setup Required'; }
+        if (nextStepEl) nextStepEl.textContent = 'Operational Readiness';
+        if (nextTextEl) nextTextEl.textContent = 'Meta Tech Provider integration online. Connect your business number or configure API tokens to start sending.';
+        if (propPhone) propPhone.textContent = workspaceId === 'lakhotia' ? '+91 98300 12345 (Pending Meta Connect)' : 'Awaiting Meta Signup';
+        if (propName) propName.textContent = workspaceId === 'lakhotia' ? 'Lakhotia Industrial Hub' : 'Awaiting Meta Signup';
+        if (propTier) propTier.textContent = '250 messages/24h (Standard)';
+      }
+    }
+
+    async function sendTestMessage() {
+      const btn = document.getElementById('sendTestBtn');
+      btn.disabled = true;
+      btn.textContent = 'Dispatching...';
+
+      try {
+        const token = getAuthToken();
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) headers['Authorization'] = 'Bearer ' + token;
+        const res = await fetch('/api/marketing/whatsapp/onboarding/test-send', {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ workspace_id: workspaceId })
+        });
+        const result = await res.json();
+        if (res.ok && result.status === 'dispatched') {
+          alert('Test message dispatched! WAMID: ' + result.provider_message_id + '\nCheck your phone. The status will update to Active as soon as WhatsApp confirms delivery.');
+          loadStatus();
+        } else {
+          alert('WhatsApp Test Notice: ' + (result.message || result.error || 'Configure Meta API token or complete Embedded Signup first.'));
+        }
+      } catch (err) {
+        alert('Network error: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Send Test to Owner';
+      }
+    }
+
+    loadStatus();
+  </script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://matrix360.local/contracts/handover-envelope.v1.schema.json",
+  "title": "Matrix360 HandoverEnvelope v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "envelope_id", "correlation_id", "workspace_id", "origin_module", "target_engine", "artifact_refs", "idempotency_key", "status", "payload", "created_at", "updated_at"],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "envelope_id": { "type": "string", "format": "uuid" },
+    "correlation_id": { "type": "string", "format": "uuid" },
+    "parent_task_id": { "type": ["string", "null"], "format": "uuid" },
+    "workspace_id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,127}$" },
+    "origin_module": { "enum": ["overview", "control_center", "marketing", "leads", "content"] },
+    "target_engine": { "enum": ["overview", "control_center", "marketing", "lead_pipeline", "content_creation", "leads", "content"] },
+    "artifact_refs": { "type": "array", "items": { "type": "object" } },
+    "idempotency_key": { "type": "string", "minLength": 8, "maxLength": 200 },
+    "status": { "enum": ["accepted", "clarification_required", "running", "partial", "completed", "failed", "blocked"] },
+    "payload": { "type": "object" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  }
+}

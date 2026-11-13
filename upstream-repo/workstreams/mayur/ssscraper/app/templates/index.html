@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Lead Generation Agent</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<main>
+  <header>
+    <div class="header-badges">
+      <span class="badge" id="ai-status-badge">🤖 AI Agent Ready</span>
+      <span class="badge badge-secondary" id="search-status-badge">🔍 Maps & Web Search Active</span>
+    </div>
+    <h1>Find Your Next Customers with AI.</h1>
+    <p class="intro">Describe your ideal customers in plain English. Autonomous AI agents create a tailored research strategy, discover matching businesses across Google Maps, web search engines, and LinkedIn, inspect official company websites, and qualify decision-makers with estimated company sizes.</p>
+  </header>
+
+  <!-- Step 1: Client Input -->
+  <section class="panel">
+    <h2>1. Describe your target audience</h2>
+    <label for="prompt">
+      <span>Who would you like to reach? (Plain English)</span>
+      <textarea id="prompt" rows="4" placeholder="Example: Find packaging manufacturers around Mumbai that may need warehouse automation or supply chain services."></textarea>
+    </label>
+
+    <div class="slider-row">
+      <div class="target-display">
+        <strong id="count-value">50</strong>
+        <span>Desired Qualified Leads</span>
+      </div>
+      <div class="slider-container">
+        <label for="count">How many leads do you need? (1 to 500)</label>
+        <input id="count" type="range" min="1" max="500" value="50" step="5">
+      </div>
+      <button id="plan-button" class="btn btn-primary">Generate Research Plan</button>
+    </div>
+  </section>
+
+  <!-- Step 2: AI Plan & Filters -->
+  <section id="plan-panel" class="panel" hidden>
+    <div class="panel-header">
+      <h2>2. AI-Generated Research Strategy</h2>
+      <span class="badge badge-success">Dynamic Strategy</span>
+    </div>
+    <p id="plan-summary" class="plan-goal"></p>
+
+    <div class="filter-section">
+      <h3>Plain-English Qualification Rules</h3>
+      <ul id="filters" class="filter-list"></ul>
+    </div>
+
+    <p id="plan-note" class="note"></p>
+
+    <div class="action-row">
+      <button id="start" class="btn btn-accent" disabled>Start Lead Research</button>
+    </div>
+  </section>
+
+  <!-- Status Bar -->
+  <section id="status" class="panel status">
+    <p>Enter your goal above and click <strong>Generate Research Plan</strong> to begin.</p>
+  </section>
+
+  <!-- Step 3: Real-Time Agents & Progress -->
+  <section class="grid">
+    <article class="panel">
+      <h2>Autonomous Agent Activity</h2>
+      <ol id="events" class="agent-feed">
+        <li>Awaiting research plan...</li>
+      </ol>
+    </article>
+
+    <article class="panel">
+      <h2>Results Summary</h2>
+      <div id="summary" class="metrics-grid">
+        <p class="placeholder-text">Your reviewed leads and company qualifications will appear here once research begins.</p>
+      </div>
+    </article>
+  </section>
+
+  <!-- Step 4: Live Website Evidence Viewer -->
+  <section id="render-panel" class="panel" hidden>
+    <h2>Live Website Evidence</h2>
+    <p class="intro">Current official business website being inspected by the evidence agent:</p>
+    <div class="preview-wrap">
+      <img id="render-preview" alt="Latest business website rendered by crawler">
+    </div>
+  </section>
+
+  <!-- Leads Preview Table -->
+  <section id="leads-panel" class="panel" hidden>
+    <div class="panel-header">
+      <h2>Qualified Leads Preview</h2>
+      <div class="download-buttons">
+        <a id="download-csv" class="btn btn-download" href="#">📥 Download Leads (Spreadsheet Ready)</a>
+        <a id="download-report" class="btn btn-secondary" href="#">📄 Download Audit Report</a>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table id="leads-table">
+        <thead>
+          <tr>
+            <th>Company Name</th>
+            <th>Website</th>
+            <th>Fit Score</th>
+            <th>Company Size</th>
+            <th>Qualification Summary</th>
+            <th>Contact Person</th>
+            <th>Role</th>
+            <th>Email</th>
+            <th>Phone</th>
+          </tr>
+        </thead>
+        <tbody id="leads-body">
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <p class="note">Evidence-bound research: Discovers official businesses, validates public contact details, estimates company size from published evidence, and formats clean spreadsheet-ready leads for your sales team.</p>
+  </footer>
+</main>
+<script src="/static/app.js"></script>
+</body>
+</html>

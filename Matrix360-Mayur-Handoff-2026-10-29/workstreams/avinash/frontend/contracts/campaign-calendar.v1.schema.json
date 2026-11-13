@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://matrix360.local/contracts/campaign-calendar.v1.schema.json",
+  "title": "Matrix360 Campaign Calendar Event v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "event_id", "correlation_id", "title", "channel", "scheduled_for", "timezone", "status", "dispatched", "created_at", "updated_at"],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "event_id": { "type": "string", "minLength": 8, "maxLength": 100 },
+    "correlation_id": { "type": "string", "format": "uuid" },
+    "title": { "type": "string", "minLength": 3, "maxLength": 160 },
+    "channel": { "enum": ["WhatsApp", "Email", "SMS", "Instagram", "Facebook", "LinkedIn", "X", "YouTube", "Google Business Profile", "Website"] },
+    "scheduled_for": { "type": "string", "format": "date-time" },
+    "timezone": { "type": "string", "minLength": 3, "maxLength": 80 },
+    "status": { "enum": ["draft", "pending_approval", "approved", "pending_provider_connection", "scheduled", "published", "completed", "cancelled", "failed"] },
+    "version_hash": { "type": ["string", "null"], "maxLength": 128 },
+    "dispatched": { "type": "boolean" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  }
+}

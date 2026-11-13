@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: matrix360-maps-scraper-v4-staging
+    runtime: docker
+    healthCheckPath: /healthz
+    autoDeploy: false
+    envVars:
+      - key: MATRIX360_DEPLOYMENT_STAGE
+        value: staging
+      - key: GOOGLE_MAPS_API_KEY
+        sync: false
+      - key: MATRIX360_APP_ACCESS_KEY
+        sync: false
+      - key: MATRIX360_INTEGRATION_KEY
+        sync: false

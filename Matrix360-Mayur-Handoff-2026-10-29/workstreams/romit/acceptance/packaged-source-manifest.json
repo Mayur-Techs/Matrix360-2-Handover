@@ -1,0 +1,33 @@
+{
+  "archives": [
+    {
+      "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_3ADMHteICgnfibNcbDJwMlgLML6/d1e09f77-08b4-44c5-9629-4784c8260f54.zip",
+      "sha256": "91f44dfeee2b661f0d59b7b62ea84d6998d89ec62ceafcea502342826b3e4cc5"
+    },
+    {
+      "url": "https://d2ol7oe51mr4n9.cloudfront.net/user_3ADMHteICgnfibNcbDJwMlgLML6/2beedf1f-ba8b-4788-825f-0996b5618d36.zip",
+      "sha256": "edf3b61d2ff69d5cef6178c7085b195715e261b8eca7910d72df0bb01adf9824"
+    }
+  ],
+  "build_command_sha256": "de5e6b023f56b4d87d4f791257252e8735e73ebf52de47f2cdb68cfeacd389a4",
+  "decoded_build_script_sha256": "78b924ac152e32df2b924b4043e74b2579197735e0c7c24142ca208e288bb830",
+  "files_sha256": {
+    "original_backend/app_cloud.py": "b3150176b4e26b6ab91f9ab5c82c678603f3fe1f68012dcc0aa8225b6658243f",
+    "original_backend/database.py": "357ae6e6c944437b76c52645cde58a5d8ecc527f5a42bda37e05b17c8c5cc4e5",
+    "original_backend/matrix360_ai_plans.py": "90202b7b728e5b2a4d89a0e263607951cf6e90984782cbb1e21b9304c21e72d4",
+    "original_backend/scraper/__init__.py": "6925f570af7e940c25129136a6cc13770e096e751b79c7d42777fc3e4280d824",
+    "original_backend/scraper/enrichment_agent.py": "bbfd2c258a5d7a6782e8a0f28d94bd9fe020c1bb34c6b517792c5c4239717a8d",
+    "original_backend/scraper/low_memory_agent.py": "02f015bc5b2fea99d927168454af9b01c7197120967a82dde687062d74876355",
+    "original_backend/scraper/maps_agent.py": "3ab8b4461e3aae2a85e33b9e8d9bf096d2465679a54f2fb1f68329653eebf3bb",
+    "original_backend/scraper_database.py": "357ae6e6c944437b76c52645cde58a5d8ecc527f5a42bda37e05b17c8c5cc4e5",
+    "original_backend/scraper_service.py": "5b75971f84e5b38eb1697f8e991480af3f32b6ae06ecbefe1b21fa470f8c6489",
+    "original_backend/stages.py": "63d59807047e1f189609dc1834e4d6ee62164e2f3fb25211664685ca2d4d5c35",
+    "original_backend/test_layout.py": "d4727ad5b4c68c2af9d5212766677bdb1e9fc3fb07f872d69011949e4ce4b780",
+    "original_backend/tests/conftest.py": "f35124ffe13c9a89dcbe00fc9576e64b4c3f5bb7c79a958c563e93518eda704f",
+    "original_backend/tests/test_ai_native.py": "7564b9b0851ca6ea45494144302d5bf783c2186b4cc856421ae076e34f1d4609",
+    "original_backend/tests/test_dynamic_tenant_contract.py": "7cb9e9a18771005afd6c472e77d16fefcef52f6c71f1fae1424276ebc10ebbbc",
+    "original_backend/tests/test_inference_capacity.py": "ff9a8b38246e27d559df162b6521f3974076aec29cbf71a9a43a726a017e7c5c",
+    "original_backend/tests/test_recovered_dynamic_crm.py": "5a910496c6a5337246e22a50404781600e96d860fd51ce6494554d4eb7d3347e",
+    "preview_app.py": "017f2dbd1bd89dbfca41741ababf2f2fa9382f3a0366f9a826eb29bc97036a9e"
+  }
+}

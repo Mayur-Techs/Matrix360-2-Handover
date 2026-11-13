@@ -1,0 +1,13 @@
+{
+  "name": "matrix360",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "start": "node tools/local-preview.cjs",
+    "linkedin:worker": "node tools/linkedin-worker.cjs",
+    "test": "node --test workstreams/avinash/frontend/tests/*.test.js workstreams/avinash/frontend/tests/*.test.cjs"
+  }
+}
