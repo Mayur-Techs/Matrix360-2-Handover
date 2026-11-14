@@ -1,0 +1,34 @@
+{
+  "checked_on": "2026-11-14",
+  "status": "passed",
+  "engine": "PostgreSQL 18.6 (PGlite 0.5.16) on wasm32-unknown-emscripten",
+  "package": "@electric-sql/pglite",
+  "package_version": "0.5.16",
+  "license": "Apache-2.0",
+  "repository": "https://github.com/electric-sql/pglite",
+  "documentation": "https://pglite.dev/docs/",
+  "npm_reported_integrity": "sha512-Nj8KcIsJL748W408U2N8q4+9IlONdpRIU8MJypIAAINMJ5nqKyqpX7Mgg/5XKkXiAib3AoZGR6hnJFlrlLBrcg==",
+  "installed_in": "OS temporary directory, isolated from application dependencies",
+  "migration": "workstreams/avinash/frontend/migrations/20261114_linkedin.sql",
+  "harness": "qa/linkedin-postgres-check.cjs",
+  "checks_passed": 13,
+  "checks": [
+    "Actual migration applies and is repeatable",
+    "Tenant record keys, optimistic revisions, canonical identity, removal",
+    "OAuth state consumption is one-time",
+    "Enqueue idempotence and due/lease claims",
+    "Dispatch uncertainty and explicit rejection retry boundaries",
+    "Tenant-scoped cancellation wins before dispatch and rejects stale worker",
+    "Manual failure retry uses expected status and preserves other destinations",
+    "Cleanup expires only requested temporary data and provider retention fields",
+    "All LinkedIn tables have RLS enabled and seven RPCs exist",
+    "Anon cannot read/write tables or invoke any LinkedIn RPC",
+    "Anon is still isolated by RLS with temporary table privileges",
+    "Authenticated cannot read/write tables or invoke any LinkedIn RPC",
+    "Authenticated is still isolated by RLS with temporary table privileges"
+  ],
+  "limitations": [
+    "Single-process embedded PostgreSQL does not prove multi-process lock contention.",
+    "Hosted Supabase migration, PostgREST integration and deployment remain unverified."
+  ]
+}

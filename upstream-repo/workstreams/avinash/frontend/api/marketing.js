@@ -187,15 +187,6 @@ async function findTask(workspaceId, correlationId) {
 module.exports = async (req, res, options = {}) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
 
-  try {
-    getTenantMasterKey();
-  } catch (err) {
-    if (err.code === 'VAULT_KEY_MISSING' || String(err.message).includes('VAULT_KEY_MISSING')) {
-      return error(res, 503, 'Marketing API unavailable: VAULT_KEY_MISSING');
-    }
-    throw err;
-  }
-
   // Extract path and query
   const url = new URL(req.url || '/api/marketing', 'http://127.0.0.1');
   const pathname = url.pathname.replace(/^\/api\/marketing\/?/, '').replace(/\/$/, '');
@@ -203,12 +194,36 @@ module.exports = async (req, res, options = {}) => {
   const query = req.query || Object.fromEntries(url.searchParams);
   const action = pathname || query.action || query.path || '';
 
+  if (action === 'linkedin' || query.action === 'linkedin' || url.pathname.startsWith('/api/linkedin')) {
+    return require('../lib/m360-linkedin-api')(req, res, options);
+  }
+
   // Parse JSON body if present
   let body = req.body;
   if (typeof body === 'string' && body.trim()) {
     try { body = JSON.parse(body); } catch { return error(res, 400, 'Invalid JSON body'); }
   } else if (!body) {
     body = {};
+  }
+
+  // LinkedIn OAuth direct for legacy token-vault endpoints
+  if ((action === 'providers/configure' || action === 'providers/verify') && (body?.provider === 'linkedin' || query.provider === 'linkedin')) {
+    return json(res, 409, {
+      status: 'linkedin_oauth_required',
+      message: action === 'providers/configure'
+        ? 'Connect each LinkedIn account in LinkedIn Campaigns & Publishing.'
+        : 'Inspect the actual LinkedIn connection and destination permissions in Accounts.',
+      endpoint: '/api/linkedin'
+    });
+  }
+
+  try {
+    getTenantMasterKey();
+  } catch (err) {
+    if (err.code === 'VAULT_KEY_MISSING' || String(err.message).includes('VAULT_KEY_MISSING')) {
+      return error(res, 503, 'Marketing API unavailable: VAULT_KEY_MISSING');
+    }
+    throw err;
   }
 
   if (action === 'webhooks/brevo' && method === 'POST') {

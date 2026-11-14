@@ -121,9 +121,9 @@ test('Multi-Provider Vault: Configures, encrypts with AES-256-GCM, and verifies 
   });
   await marketingApi(liReq.req, liReq.res);
   const liRes = liReq.get();
-  assert.equal(liRes.status, 200);
-  assert.equal(liRes.body.provider, 'linkedin');
-  assert.equal(liRes.body.masked_token.slice(-4), '3456');
+  assert.equal(liRes.status, 409);
+  assert.equal(liRes.body.status, 'linkedin_oauth_required');
+  assert.equal(liRes.body.endpoint, '/api/linkedin');
 
   // 5. SMS (Twilio)
   const smsReq = mockHttp('POST', '/api/marketing/providers/configure', {
@@ -147,7 +147,8 @@ test('Multi-Provider Vault: Configures, encrypts with AES-256-GCM, and verifies 
   assert.equal(statusRes.body.providers.whatsapp.configured, true);
   assert.equal(statusRes.body.providers.email.configured, true);
   assert.equal(statusRes.body.providers.meta.configured, true);
-  assert.equal(statusRes.body.providers.linkedin.configured, true);
+  // LinkedIn requires real OAuth (/api/linkedin) and rejects manual token configuration
+  assert.equal(statusRes.body.providers.linkedin.configured, false);
   assert.equal(statusRes.body.providers.sms.configured, true);
 
   global.fetch = originalFetch;

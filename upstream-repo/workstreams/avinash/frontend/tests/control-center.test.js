@@ -147,7 +147,7 @@ test('Overview resolves all suggested prompts and preserves explicit creative fo
   ['What is market research?','advice'],
   ['Find prospects, create an email poster, and prepare outreach for the campaign.','email_workflow']
  ])assert.equal(intent(request).kind,kind,request);
- assert.deepEqual(intent('Write a LinkedIn caption for manufacturers.'),{kind:'copy',channel:'LinkedIn'});
+ assert.deepEqual(intent('Write a LinkedIn caption for manufacturers.'),{kind:'outreach',channel:'LinkedIn'});
 });
 test('reviewed Overview handoffs carry the edited brief to the requested tool',async()=>{
  const source=require('../lib/m360-control-client');

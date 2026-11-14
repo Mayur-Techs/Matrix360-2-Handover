@@ -2,6 +2,10 @@
   "version": 2,
   "rewrites": [
     {
+      "source": "/api/linkedin",
+      "destination": "/api/marketing?action=linkedin"
+    },
+    {
       "source": "/api/market-research",
       "destination": "/api/product-ui?mode=research_server"
     },

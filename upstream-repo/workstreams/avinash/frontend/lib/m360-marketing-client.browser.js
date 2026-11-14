@@ -2328,26 +2328,6 @@
                     </form>
                   </div>
 
-                  <!-- LinkedIn Vault Drawer (#m360-linkedin-config-vault) -->
-                  <div id="m360-linkedin-config-vault" class="m360-provider-vault" style="display:none; padding:14px; background:var(--ws-panel, #ffffff); border:2px solid #0077b5; border-radius:10px; margin-top:8px; color:var(--ws-text, #1e293b);">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                      <strong style="font-size:13px; color:#0077b5;">LinkedIn Marketing API Vault</strong>
-                      <span style="font-size:10.5px; background:var(--ws-soft, #ecfdf5); color:var(--ws-accent, #047857); border:1px solid var(--ws-line, #a7f3d0); padding:2px 8px; border-radius:10px; font-weight:700;">AES-256-GCM ENCRYPTED</span>
-                    </div>
-                    <p style="margin:0 0 10px; font-size:11.5px; color:var(--ws-muted, #475569); line-height:1.45;">Enter your LinkedIn OAuth 2.0 Access Token and Organization URN for enterprise B2B updates and posts.</p>
-                    <form id="m360-linkedin-vault-form">
-                      <label style="display:block; font-size:11.5px; font-weight:600; color:var(--ws-text, #1e293b); margin-bottom:3px;">OAuth 2.0 Access Token
-                        <input type="password" id="m360-linkedin-input-token" required placeholder="AQV..." style="width:100%; box-sizing:border-box; padding:6px 9px; font-size:12px; background:var(--ws-panel, #ffffff); color:var(--ws-text, #1e293b); border:1px solid var(--ws-line, #cbd5e1); border-radius:6px; font-family:monospace;" />
-                      </label>
-                      <label style="display:block; font-size:11.5px; font-weight:600; color:var(--ws-text, #1e293b); margin-top:8px; margin-bottom:3px;">Organization URN
-                        <input type="text" id="m360-linkedin-input-urn" required placeholder="urn:li:organization:1234567" style="width:100%; box-sizing:border-box; padding:6px 9px; font-size:12px; background:var(--ws-panel, #ffffff); color:var(--ws-text, #1e293b); border:1px solid var(--ws-line, #cbd5e1); border-radius:6px; font-family:monospace;" />
-                      </label>
-                      <div style="display:flex; gap:8px; margin-top:10px; justify-content:flex-end;">
-                        <button type="button" id="m360-btn-cancel-linkedin-config" style="padding:6px 12px; font-size:11.5px; background:var(--ws-soft, #f1f5f9); color:var(--ws-muted, #475569); border:1px solid var(--ws-line, #cbd5e1); border-radius:6px; cursor:pointer;">Cancel</button>
-                        <button type="submit" id="m360-btn-save-linkedin-vault" style="padding:6px 14px; font-size:11.5px; font-weight:700; background:#0077b5; color:#ffffff; border:none; border-radius:6px; cursor:pointer;">Save &amp; Verify LinkedIn</button>
-                      </div>
-                    </form>
-                  </div>
 
                   <!-- SMS Vault Drawer (#m360-sms-config-vault) -->
                   <div id="m360-sms-config-vault" class="m360-provider-vault" style="display:none; padding:14px; background:var(--ws-panel, #ffffff); border:2px solid #e11d48; border-radius:10px; margin-top:8px; color:var(--ws-text, #1e293b);">
@@ -3584,36 +3564,10 @@
       }
     });
 
-    // LinkedIn Key Vault Handlers
+    // LinkedIn Workspace Launcher
     $('m360-btn-open-linkedin-config')?.addEventListener('click', () => {
-      const vault = $('m360-linkedin-config-vault');
-      if (vault) vault.style.display = vault.style.display === 'none' ? 'block' : 'none';
-    });
-    $('m360-btn-cancel-linkedin-config')?.addEventListener('click', () => {
-      const vault = $('m360-linkedin-config-vault');
-      if (vault) vault.style.display = 'none';
-    });
-    $('m360-linkedin-vault-form')?.addEventListener('submit', async event => {
-      event.preventDefault();
-      const token = $('m360-linkedin-input-token')?.value.trim();
-      const urn = $('m360-linkedin-input-urn')?.value.trim();
-      if (!token || !urn) { notify('Access Token and Organization URN are required.', 'error'); return; }
-      try {
-        const res = await api('/api/marketing/providers/configure', {
-          method: 'POST',
-          body: JSON.stringify({ workspace_id: ws(), provider: 'linkedin', token, organization_urn: urn })
-        });
-        const statusEl = $('m360-linkedin-provider-status');
-        if (statusEl) {
-          statusEl.textContent = '✓ LinkedIn Connected (' + urn + ')';
-          statusEl.style.color = '#15803d';
-        }
-        notify('LinkedIn credentials encrypted and verified successfully!', 'success');
-        const vault = $('m360-linkedin-config-vault');
-        if (vault) vault.style.display = 'none';
-      } catch (err) {
-        notify(err.message || 'Failed to configure LinkedIn credentials.', 'error');
-      }
+      const liDraft = activeTask?.channel_draft_versions?.LinkedIn?.versions?.at(-1);
+      window.Matrix360LinkedIn?.open(liDraft ? { text: liDraft.body, title: activeTask?.title, objective: activeTask?.prompt || activeTask?.objective } : {});
     });
     $('m360-btn-verify-linkedin')?.addEventListener('click', async () => {
       const btn = $('m360-btn-verify-linkedin');
@@ -5368,7 +5322,14 @@
         <small style="color:#5f7a72;display:block;text-align:center;margin-top:6px;">
           Optimized for LinkedIn B2B C-Suite Reach. Character count: <strong>${textBody.length}</strong> chars.
         </small>
+        <div style="text-align:center;margin-top:10px;">
+          <button type="button" id="m360-btn-open-linkedin-workspace" class="btn" style="padding:6px 14px;font-size:12px;background:#0a66c2;color:#fff;border:none;border-radius:4px;cursor:pointer;font-weight:600;">Open in LinkedIn Workspace →</button>
+        </div>
       `;
+      $('m360-btn-open-linkedin-workspace')?.addEventListener('click', () => {
+        const liDraft = activeTask?.channel_draft_versions?.LinkedIn?.versions?.at(-1);
+        window.Matrix360LinkedIn?.open({ text: liDraft?.body || textBody, title: activeTask?.title, objective: activeTask?.prompt || activeTask?.objective });
+      });
       $('m360-ctwa-card').style.display = 'none';
     } else {
       viewContainer.innerHTML = `

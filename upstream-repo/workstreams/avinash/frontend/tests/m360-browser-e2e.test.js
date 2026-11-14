@@ -48,18 +48,21 @@ test('Stage 2 E2E: Main Dashboard serves with HTTP 200 and wires all marketing a
   assert.ok(res.body.includes('href="whatsapp-onboarding.html"'), 'Header must contain WhatsApp onboarding link');
   assert.ok(res.body.includes('href="whatsapp-status.html"'), 'Header must contain WhatsApp status link');
   assert.ok(res.body.includes('href="email-status.html"'), 'Header must contain Email Setup link');
+  assert.ok(res.body.includes('id="m360-header-linkedin-btn"'), 'Header must contain LinkedIn link');
   assert.ok(res.body.includes('href="analytics-dashboard.html"'), 'Header must contain Analytics link');
   assert.ok(res.body.includes('href="pilot.html"'), 'Header must contain Campaigns / Pilot link');
 
   // Sidebar Navigation Links
   assert.ok(res.body.includes('id="nav-whatsapp"'), 'Sidebar nav must contain WhatsApp link');
   assert.ok(res.body.includes('id="nav-email"'), 'Sidebar nav must contain Email link');
+  assert.ok(res.body.includes('id="nav-linkedin"'), 'Sidebar nav must contain LinkedIn link');
   assert.ok(res.body.includes('id="nav-analytics"'), 'Sidebar nav must contain Analytics link');
   assert.ok(res.body.includes('id="nav-pilot"'), 'Sidebar nav must contain Pilot link');
 
   // Services Cards
   assert.ok(res.body.includes('id="services-whatsapp-link"'), 'Services must contain WhatsApp card');
   assert.ok(res.body.includes('id="services-email-link"'), 'Services must contain Email card');
+  assert.ok(res.body.includes('id="services-linkedin-link"'), 'Services must contain LinkedIn card');
   assert.ok(res.body.includes('id="services-analytics-link"'), 'Services must contain Analytics card');
   assert.ok(res.body.includes('id="services-pilot-link"'), 'Services must contain Pilot card');
 });
@@ -182,4 +185,9 @@ test('Stage 2 E2E: Unauthorized/unknown page requests return strict 404', async 
 
   assert.equal(res.statusCode, 404);
   assert.equal(res.body, 'Unknown page');
+});
+
+test('Stage 3 E2E: LinkedIn workspace browser lifecycle (zero errors, guardrails on/off, primary buttons active, campaign handoff)', async () => {
+  const runBrowserPass = require('./linkedin-ui-browser.cjs');
+  await runBrowserPass();
 });

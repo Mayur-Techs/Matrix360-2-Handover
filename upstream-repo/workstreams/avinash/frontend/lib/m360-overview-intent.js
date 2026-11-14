@@ -10,6 +10,7 @@ module.exports=function resolveOverviewIntent(message){
  const channel=[[/\bwhatsapp\b/,'WhatsApp'],[/\blinkedin\b/,'LinkedIn'],[/\binstagram\b/,'Instagram'],
   [/\bfacebook\b/,'Facebook'],[/\bemail\b/,'Email'],[/\byoutube\b/,'YouTube'],[/\btwitter\b/,'X']]
   .find(([pattern])=>pattern.test(request))?.[1]||'';
+ if(!advisory&&channel==='LinkedIn'&&!/\b(?:whatsapp|email)\b/.test(request)&&/\b(?:create|make|produce|generate|draft|write|prepare|build|need|want|publish|schedule|launch|run)\b/.test(request))return {kind:'outreach',channel};
  if(!advisory&&reel&&produce)return {kind:'reel'};
  if(/\b(?:find|source|search for|generate|get)\b.*\b(?:prospects?|leads?|manufacturers?|suppliers?|distributors?|dentists?|companies|buyers|businesses|contacts?)\b/.test(request)&&!advisory&&!/\b(?:campaign|outreach)\b/.test(request))return {kind:'leads'};
  const outreach=/\b(?:outreach|send|distribute|contact|follow[- ]up sequence)\b/.test(request);

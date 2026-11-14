@@ -1,0 +1,18 @@
+{
+  "date": "2026-11-14",
+  "timezone": "Asia/Calcutta",
+  "runtime": "Node 24.22.1",
+  "application_tests": {"files": 39, "tests": 269, "passed": 269, "failed": 0, "skipped": 0},
+  "migration_checks": {"engine": "PostgreSQL 18.6 / PGlite 0.5.16", "passed": 13, "failed": 0, "hosted": false},
+  "actual_local_preview_smoke": {"passed": 2, "auto_login": false, "authenticated": false},
+  "browser": {"transport": "declared fixture API", "runtime_errors": 0, "viewport_widths": [375, 768, 1440]},
+  "linkedin_safety_guardrails": false,
+  "app_credentials_configured": false,
+  "live_linkedin_oauth_verified": false,
+  "live_publication_performed": false,
+  "paid_generation_performed": false,
+  "hosted_migration_applied": false,
+  "hosted_deployment_performed": false,
+  "provider_success_in_tests": "mocked; never evidence of live publication",
+  "existing_email_whatsapp_behavior": "unchanged; shared test edits affect only LinkedIn expectations"
+}
