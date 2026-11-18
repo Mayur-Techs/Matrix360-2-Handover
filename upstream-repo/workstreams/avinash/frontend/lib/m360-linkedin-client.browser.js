@@ -49,15 +49,17 @@
   }
   function updateConfiguredControls() {
     const config=state.status?.configuration||{};
+    const activeKey=sessionStorage.getItem('matrix360_user_openai_key')||'';
+    const isAiReady=Boolean(config.ai_ready||activeKey);
     const connectBtn=$('panel')?.querySelector('[data-li-action="connect"]');
     if(connectBtn&&(!config.oauth_ready||!config.token_encryption_ready)){
       connectBtn.disabled=true;
       connectBtn.textContent='Setup not finished';
     }
     const prepareBtn=$('panel')?.querySelector('[data-li-action="prepare"]');
-    if(prepareBtn&&!config.ai_ready)prepareBtn.disabled=true;
+    if(prepareBtn&&!isAiReady)prepareBtn.disabled=true;
     const reviseBtn=$('panel')?.querySelector('[data-li-action="revise"]');
-    if(reviseBtn&&!config.ai_ready)reviseBtn.disabled=true;
+    if(reviseBtn&&!isAiReady)reviseBtn.disabled=true;
   }
   async function run(task) {
     if(state.busy)return;
@@ -81,6 +83,24 @@
       <nav class="li-row" aria-label="LinkedIn sections"><button type="button" data-li-tab="accounts">Accounts</button><button type="button" data-li-tab="composer">Composer</button><button type="button" data-li-tab="campaigns">Campaigns &amp; calendar</button><button type="button" data-li-tab="results">Published &amp; performance</button></nav>
       <section id="m360-li-accounts"><h3>Connected accounts</h3><div id="m360-li-banner" style="display:none"></div><p id="m360-li-setup" class="li-muted"></p><button type="button" class="li-primary" data-li-action="connect">Connect LinkedIn</button><div id="m360-li-connections"></div><h4>Publishing destinations</h4><div id="m360-li-destination-list"></div></section>
       <section id="m360-li-composer" hidden><h3>Prepare a campaign</h3><p id="m360-li-editing" class="li-muted">New draft</p>
+      <div id="m360-li-ai-connector" class="li-card" style="background:#f0fdf4;border:1px solid #bbf7d0;padding:12px;margin:10px 0;border-radius:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+          <div>
+            <strong id="m360-li-ai-badge" style="color:#166534;">● AI Drafting Ready (Connected)</strong>
+            <p id="m360-li-ai-subtext" class="li-muted" style="margin:2px 0 0 0;">Connected for company-grounded LinkedIn drafts and revisions.</p>
+          </div>
+          <button type="button" id="m360-li-ai-toggle-btn" data-li-action="toggle-ai-key" style="font-size:12px;padding:4px 8px;">Configure API Key</button>
+        </div>
+        <div id="m360-li-ai-key-drawer" style="display:none;margin-top:10px;padding-top:10px;border-top:1px solid #dcfce7;">
+          <label style="font-size:12px;font-weight:600;margin-bottom:4px;display:block;">OpenAI API Key (sk-...)
+            <input type="password" id="m360-li-ai-key-input" placeholder="sk-..." maxlength="256" autocomplete="off" style="font-family:monospace;margin-top:4px;">
+          </label>
+          <div class="li-row" style="margin:6px 0 0 0;">
+            <button type="button" class="li-primary" data-li-action="save-ai-key">Connect &amp; Verify Key</button>
+            <span id="m360-li-ai-key-status" class="li-muted" style="font-size:12px;"></span>
+          </div>
+        </div>
+      </div>
       <div class="li-grid"><div><label>Campaign name<input id="m360-li-title" maxlength="160"></label><label>Business objective<textarea id="m360-li-objective" maxlength="4000" placeholder="Describe your offering, audience and the outcome you want."></textarea></label><label>Language<select id="m360-li-language"><option value="English">English</option><option value="Hindi">Hindi</option><option value="Bengali">Bengali</option></select></label><button type="button" data-li-action="prepare">Prepare with AI</button><div id="m360-li-concepts"></div><label>Post text<textarea id="m360-li-text" maxlength="3000" style="min-height:210px"></textarea></label><p id="m360-li-length" class="li-muted"></p><label>Revision request<input id="m360-li-revision-request" maxlength="1000" placeholder="For example: make the opening more concise"></label><button type="button" data-li-action="revise">Revise with AI</button><label>Link URL, optional<input id="m360-li-link" type="url" placeholder="https://"></label></div>
       <div><fieldset><legend>Publish as</legend><div id="m360-li-destination-options"></div></fieldset><fieldset><legend>Media</legend><p class="li-muted">Use a saved Content Studio creative or upload an image, MP4 video or PDF. Choose one asset per post.</p><label>Upload media<input id="m360-li-file" type="file" accept="image/jpeg,image/png,video/mp4,application/pdf"></label><button type="button" data-li-action="upload">Upload selected file</button><p id="m360-li-upload-progress" role="status"></p><label>Saved Content Studio version<select id="m360-li-studio"><option value="">Choose a saved creative</option></select></label><button type="button" data-li-action="attach">Use this creative</button><div id="m360-li-asset-options"></div><label><input type="checkbox" id="m360-li-rights"> I have permission to publish this media.</label></fieldset>
       <fieldset><legend>Publication time</legend><label>Date and time<input id="m360-li-date" type="datetime-local"></label><p class="li-muted">Timezone: <strong>${escape(zone)}</strong>. Leave blank to queue publication now.</p><p id="m360-li-guardrails" class="li-muted"></p></fieldset></div></div>
@@ -144,13 +164,27 @@
     }
     const workerText=config.worker_ready===true?'Publication worker is active and verified.':(config.worker_last_seen?'⚠️ Publication worker is offline (last heartbeat: '+stamp(config.worker_last_seen)+'). Scheduled publications will not dispatch until the worker is restarted.':'⚠️ Publication worker health has not been verified (worker offline).');
     $('setup').innerHTML=(config.oauth_ready?'LinkedIn authorization is configured. Each connection grants its own access.':'An administrator must configure the LinkedIn developer app before connecting.')+'<br><span id="m360-li-worker-status" class="li-muted" style="'+(config.worker_ready===true?'color:#0a695e':'color:#b91c1c')+'">'+escape(workerText)+'</span>';
+    const activeKey=sessionStorage.getItem('matrix360_user_openai_key')||'';
+    const isAiReady=Boolean(config.ai_ready||activeKey);
     const prepareBtn=$('panel').querySelector('[data-li-action="prepare"]'),reviseBtn=$('panel').querySelector('[data-li-action="revise"]');
-    if(prepareBtn){prepareBtn.disabled=!config.ai_ready;prepareBtn.title=config.ai_ready?'':'AI drafting needs configuration (OPENAI_API_KEY and M360_OPENAI_SPEND_APPROVED)';}
-    if(reviseBtn){reviseBtn.disabled=!config.ai_ready;reviseBtn.title=config.ai_ready?'':'AI drafting needs configuration (OPENAI_API_KEY and M360_OPENAI_SPEND_APPROVED)';}
-    let aiStatusEl=document.getElementById('m360-li-ai-status');
-    if(!config.ai_ready){
-      if(!aiStatusEl&&$('concepts'))$('concepts').insertAdjacentHTML('beforebegin','<p id="m360-li-ai-status" class="li-muted" style="color:#856404;font-size:12px;">AI drafting needs configuration (OPENAI_API_KEY and M360_OPENAI_SPEND_APPROVED must be configured).</p>');
-    }else if(aiStatusEl){aiStatusEl.remove();}
+    const aiBadge=$('ai-badge'),aiSubtext=$('ai-subtext'),aiBox=$('ai-connector'),aiDrawer=$('ai-key-drawer');
+    if(isAiReady){
+      if(aiBadge){aiBadge.style.color='#166534';aiBadge.textContent='● AI Drafting Ready (Connected)';}
+      if(aiSubtext)aiSubtext.textContent='Grounded to company facts. Active for B2B drafting and revisions.';
+      if(aiBox){aiBox.style.background='#f0fdf4';aiBox.style.borderColor='#bbf7d0';}
+      if(prepareBtn){prepareBtn.disabled=false;prepareBtn.title='Prepare grounded post from business objective';}
+      if(reviseBtn){reviseBtn.disabled=false;reviseBtn.title='Revise current post draft with instructions';}
+      const aiStatusEl=document.getElementById('m360-li-ai-status');if(aiStatusEl)aiStatusEl.remove();
+    }else{
+      if(aiBadge){aiBadge.style.color='#b45309';aiBadge.textContent='⚠️ AI Key Required';}
+      if(aiSubtext)aiSubtext.textContent='Connect your OpenAI API key below to enable "Prepare with AI" and "Revise with AI".';
+      if(aiBox){aiBox.style.background='#fffbeb';aiBox.style.borderColor='#fde68a';}
+      if(aiDrawer)aiDrawer.style.display='block';
+      if(prepareBtn){prepareBtn.disabled=true;prepareBtn.title='Connect an OpenAI API key above to enable AI drafting';}
+      if(reviseBtn){reviseBtn.disabled=true;reviseBtn.title='Connect an OpenAI API key above to enable AI revisions';}
+      let aiStatusEl=document.getElementById('m360-li-ai-status');
+      if(!aiStatusEl&&$('concepts'))$('concepts').insertAdjacentHTML('beforebegin','<p id="m360-li-ai-status" class="li-muted" style="color:#856404;font-size:12px;">AI drafting needs configuration. Enter your OpenAI API key above or set OPENAI_API_KEY in environment.</p>');
+    }
     $('guardrails').textContent=guard.approval_required?'Approval of the saved version is required before it is queued.':'Authorized users can queue a saved version directly.';
     $('rights').closest('label').hidden=!guard.media_rights_required;
     $('panel').querySelector('[data-li-action="approve"]').hidden=!guard.approval_required;
@@ -243,15 +277,48 @@
     if(name==='preview')return preview();
     if(name==='preview-media')return previewMedia();
     if(name==='save')return save();
+    if(name==='toggle-ai-key'){
+      const d=$('ai-key-drawer');
+      if(d)d.style.display=d.style.display==='none'?'block':'none';
+      return;
+    }
+    if(name==='save-ai-key'){
+      const key=$('ai-key-input')?.value?.trim();
+      if(!key||!key.startsWith('sk-')||key.length<20)throw Error('Enter a valid OpenAI API key starting with sk-.');
+      announce('Verifying API key with OpenAI…');
+      const statusEl=$('ai-key-status');
+      if(statusEl)statusEl.textContent='Verifying with OpenAI…';
+      await api('configure-ai',{api_key:key});
+      sessionStorage.setItem('matrix360_user_openai_key',key);
+      if(state.status?.configuration)state.status.configuration.ai_ready=true;
+      if(statusEl)statusEl.textContent='Verified and connected!';
+      announce('OpenAI API key verified and connected successfully!');
+      await refresh();
+      const d=$('ai-key-drawer');if(d)d.style.display='none';
+      return;
+    }
     if(name==='prepare'||name==='revise'){
-      if(!state.status.configuration?.ai_ready)throw Error('AI drafting needs configuration. OPENAI_API_KEY and M360_OPENAI_SPEND_APPROVED must be configured.');
-      announce(name==='revise'?'Revising the selected draft…':'Preparing content from your business objective…');
-      const result=await api('prepare',{objective:$('objective').value,language:$('language').value,time_zone:zone,campaign_id:state.current?.id,...(state.handoverId?{handover_id:state.handoverId}:{}),...(name==='revise'?{revision_request:$('revision-request').value,text:$('text').value}:{})});
+      const activeKey=sessionStorage.getItem('matrix360_user_openai_key')||$('ai-key-input')?.value?.trim()||'';
+      if(!state.status.configuration?.ai_ready&&!activeKey)throw Error('AI drafting needs configuration. Enter your OpenAI API key above or configure OPENAI_API_KEY on the server.');
+      if(name==='revise'&&!$('text').value.trim()&&!$('revision-request').value.trim())throw Error('Enter revision instructions in the Revision request field.');
+      announce(name==='revise'?'Revising draft with company grounding…':'Preparing content from your business objective…');
+      const result=await api('prepare',{
+        objective:$('objective').value.trim()||(name==='revise'?'Revise post according to instructions':''),
+        language:$('language').value,
+        time_zone:zone,
+        campaign_id:state.current?.id,
+        ...(activeKey?{api_key:activeKey}:{}),
+        ...(state.handoverId?{handover_id:state.handoverId}:{}),
+        ...(name==='revise'?{revision_request:$('revision-request').value,text:$('text').value}:{})
+      });
       if(typeof result.text!=='string'||!result.text.trim())throw Error('AI returned no draft. Your current content is unchanged.');
       $('text').value=result.text;$('length').textContent=result.text.length+' / 3,000 characters';
       state.scheduleProposal=null;$('schedule-proposal').hidden=true;
       if(result.schedule_proposal){try{proposalLocal(result.schedule_proposal);state.scheduleProposal=result.schedule_proposal;$('schedule-proposal').hidden=false;$('schedule-proposal').innerHTML='<strong>Suggested publication time</strong><p>'+escape(stamp(result.schedule_proposal.scheduled_at)+' ('+zone+')')+'</p><p>'+escape(result.schedule_proposal.explanation||'')+'</p><button type="button" data-li-action="apply-schedule">Use this time in the draft</button>';}catch{announce('AI returned an invalid time proposal. Choose the publication time manually.',true);}}
-      $('concepts').innerHTML=(array(result.missing_information).length?'<div class="li-card"><strong>Information still needed</strong><ul>'+result.missing_information.map(item=>'<li>'+escape(item)+'</li>').join('')+'</ul></div>':'')+array(result.concepts).map((c,i)=>`<div class="li-card"><strong>Concept ${i+1}</strong><p>${escape(typeof c==='string'?c:c.title||c.name||'')}</p><p>${escape(typeof c==='object'?c.summary||c.description||c.text||'':'')}</p>${typeof c==='object'&&c.text?`<button type="button" data-li-action="concept" data-index="${i}">Use this concept</button>`:''}</div>`).join('');state.concepts=array(result.concepts);announce('AI draft prepared. Review and save your chosen content.');return;
+      $('concepts').innerHTML=(array(result.missing_information).length?'<div class="li-card"><strong>Information still needed</strong><ul>'+result.missing_information.map(item=>'<li>'+escape(item)+'</li>').join('')+'</ul></div>':'')+array(result.concepts).map((c,i)=>`<div class="li-card"><strong>Concept ${i+1}</strong><p>${escape(typeof c==='string'?c:c.title||c.name||'')}</p><p>${escape(typeof c==='object'?c.summary||c.description||c.text||'':'')}</p>${typeof c==='object'&&c.text?`<button type="button" data-li-action="concept" data-index="${i}">Use this concept</button>`:''}</div>`).join('');state.concepts=array(result.concepts);
+      announce(name==='revise'?'AI draft revised with your instructions. Review and save your chosen content.':'AI draft prepared. Review and save your chosen content.');
+      preview();
+      return;
     }
     if(name==='concept'){const c=state.concepts?.[Number(button.dataset.index)];if(c?.text)$('text').value=c.text;preview();return;}
     if(name==='apply-schedule'){if(!state.scheduleProposal)throw Error('Prepare a valid schedule suggestion first.');$('date').value=proposalLocal(state.scheduleProposal);preview();announce('Suggested time added to the draft. Save it before queuing publication.');return;}

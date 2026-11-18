@@ -2,7 +2,7 @@
 const {timingSafeEqual}=require('node:crypto');
 const {createService}=require('./m360-linkedin-service');
 const reads=new Set(['status','campaigns','assets','asset','progress']);
-const publishOps=new Set(['connect','callback','disconnect','destinations','approve','schedule','cancel','retry','reconcile']);
+const publishOps=new Set(['connect','callback','disconnect','destinations','approve','schedule','cancel','retry','reconcile','configure-ai']);
 function send(res,status,data){res.statusCode=status;res.setHeader('Content-Type','application/json; charset=utf-8');res.setHeader('Cache-Control','private, no-store');res.setHeader('X-Content-Type-Options','nosniff');res.end(JSON.stringify(data));}
 function secretMatch(actual,expected){return expected.length>=32&&actual.length===expected.length&&timingSafeEqual(Buffer.from(actual),Buffer.from(expected));}
 module.exports=async(req,res,options={})=>{

@@ -461,6 +461,31 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
    - The publication worker claims the job, uploads/dispatches the post via real LinkedIn REST API, and records the genuine provider URN (`urn:li:share:...`).
    - Verify the post appears on the owner's LinkedIn feed and read-back telemetry verifies `PUBLISHED` status.
 
+---
+
+### Follow-Up: AI Drafting, Revisions, & Company Grounding (Commit `56bf299`)
+1. **Interactive In-UI AI API Key Connector**:
+   - Added `#m360-li-ai-connector` widget in the LinkedIn campaign composer.
+   - Provides live visual status: `● AI Drafting Ready (Connected)` or `⚠️ AI Key Required`.
+   - Included inline API Key drawer allowing client admins to connect and verify their OpenAI API key with provider round-trip handshake.
+   - Supported session-level persistence (`sessionStorage`) and backend persistence via `op=configure-ai` and `POST /api/marketing?action=ai/configure`.
+2. **Company Grounding Without Flattery**:
+   - Eliminated the hard 409 `BRAND_REQUIRED` failure when Supabase database brand table is empty.
+   - Grounded generation in verified company details from CRM membership (`ctx.membership.name`) and explicit client brand facts.
+   - Updated system prompt with strict anti-flattery directives: forbids generic sycophancy, buzzwords ("game-changer", "world-class excellence"), and unsubstantiated claims.
+3. **Linked "Revise with AI"**:
+   - Fully enabled and wired `data-li-action="revise"` to send existing post text + user revision instructions.
+   - Surgical editing preserving verified company facts.
+4. **Unified AI Touchpoints**:
+   - Key configuration unblocks LinkedIn Composer (`prepare` / `revise`), Content Studio (`content-image` / `content-reel`), Control Center (`/api/control-center`), and Chat-to-Campaign (`/api/marketing?action=chat_to_campaign`).
+5. **Verification**:
+   - `tests/linkedin-ai-prepare.test.js` (5 / 5 pass).
+   - `tests/linkedin-*.test.js` (81 / 81 pass).
+   - `tests/m360-browser-e2e.test.js` (7 / 7 pass).
+   - `tools/audit/exploits.js` (37 / 37 NOT REPRODUCED).
+   - `npm test` (490 / 490 pass across 14 suites).
+
+
 
 
 

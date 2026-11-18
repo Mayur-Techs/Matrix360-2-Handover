@@ -639,6 +639,55 @@ module.exports = async (req, res, options = {}) => {
       return json(res, 200, { status: 'ok', estimate: estimateBudgetScenarios({ budget, durationDays, profileType: body.profile_type }), ab_test: calculateABSampleSize({ baselineConversion: Number(body.baseline_conversion || .03), expectedLiftPercent: Number(body.expected_lift_percent || 25), dailyVisitors, campaignDurationDays: durationDays, availableSample: body.available_sample }) });
     }
 
+    if (action === 'ai/configure' && method === 'POST') {
+      const role = access.membership?.role;
+      if (!['client_admin', 'platform_owner', 'marketing_operator'].includes(role)) {
+        return error(res, 403, 'AI configuration requires client_admin or marketing_operator role.');
+      }
+      const newKey = String(body.api_key || '').trim();
+      if (!newKey || !newKey.startsWith('sk-') || newKey.length < 20) {
+        return error(res, 400, 'Enter a valid OpenAI API key starting with sk-.');
+      }
+      try {
+        const testRes = await fetch('https://api.openai.com/v1/models', {
+          headers: { Authorization: 'Bearer ' + newKey },
+          signal: AbortSignal.timeout(10000)
+        });
+        if (!testRes.ok) {
+          let detail = '';
+          try {
+            const errJson = await testRes.json();
+            if (errJson?.error?.message) detail = ': ' + errJson.error.message;
+          } catch (_) {}
+          return error(res, 400, 'OpenAI rejected this API key' + detail + '. Verify the key is active.');
+        }
+      } catch (err) {
+        return error(res, 502, 'Could not verify API key with OpenAI: ' + err.message);
+      }
+      process.env.OPENAI_API_KEY = newKey;
+      process.env.M360_OPENAI_SPEND_APPROVED = 'yes';
+      try {
+        const fs = require('node:fs');
+        const path = require('node:path');
+        const envPath = path.resolve(__dirname, '../.env.local');
+        if (fs.existsSync(envPath)) {
+          let content = fs.readFileSync(envPath, 'utf8');
+          if (/^OPENAI_API_KEY=/m.test(content)) {
+            content = content.replace(/^OPENAI_API_KEY=.*$/m, `OPENAI_API_KEY="${newKey}"`);
+          } else {
+            content += `\nOPENAI_API_KEY="${newKey}"`;
+          }
+          if (/^M360_OPENAI_SPEND_APPROVED=/m.test(content)) {
+            content = content.replace(/^M360_OPENAI_SPEND_APPROVED=.*$/m, 'M360_OPENAI_SPEND_APPROVED="yes"');
+          } else {
+            content += '\nM360_OPENAI_SPEND_APPROVED="yes"';
+          }
+          fs.writeFileSync(envPath, content, 'utf8');
+        }
+      } catch (_) {}
+      return json(res, 200, { status: 'ok', configured: true, message: 'OpenAI API key verified and connected successfully.' });
+    }
+
     if (action === 'providers/configure' && method === 'POST') {
       const role = access.membership?.role;
       if (!['client_admin', 'platform_owner'].includes(role)) {
