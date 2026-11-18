@@ -1418,6 +1418,34 @@
 
       </div>
 
+      <!-- Connected Campaign Workspaces & Channels Bar -->
+      <div id="m360-outreach-connected-campaigns" class="m360-card" style="margin: 14px 0 16px; padding: 14px 18px; background: var(--ws-soft, #f8fafc); border: 1px solid var(--ws-line, #cbd5e1); border-radius: 12px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:10px;">
+          <span style="font-size:12px; font-weight:800; letter-spacing:0.06em; text-transform:uppercase; color:var(--ws-accent, #0f766e);">Connected Campaign Engines &amp; Workspaces</span>
+          <span style="font-size:11.5px; color:var(--ws-muted, #64748b);">Direct multi-channel access</span>
+        </div>
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+          <button type="button" id="m360-outreach-nav-linkedin" class="btn" style="display:inline-flex; align-items:center; gap:6px; padding:7px 13px; font-size:12px; font-weight:600; background:#0a66c2; color:#ffffff; border:none; border-radius:6px; cursor:pointer;">
+            <span>💼</span> <span>LinkedIn Campaign</span>
+          </button>
+          <a href="/whatsapp-onboarding.html" id="m360-outreach-nav-whatsapp" class="btn" style="display:inline-flex; align-items:center; gap:6px; padding:7px 13px; font-size:12px; font-weight:600; background:#075e54; color:#ffffff; border:none; border-radius:6px; text-decoration:none;">
+            <span>💬</span> <span>WhatsApp Campaign</span>
+          </a>
+          <a href="/email-status.html" id="m360-outreach-nav-email" class="btn" style="display:inline-flex; align-items:center; gap:6px; padding:7px 13px; font-size:12px; font-weight:600; background:#0284c7; color:#ffffff; border:none; border-radius:6px; text-decoration:none;">
+            <span>✉️</span> <span>Email Campaign</span>
+          </a>
+          <a href="/client-dashboard.html?page=leads#leads" id="m360-outreach-nav-crm" data-outreach-page="leads" class="btn" style="display:inline-flex; align-items:center; gap:6px; padding:7px 13px; font-size:12px; font-weight:600; background:var(--ws-panel, #ffffff); color:var(--ws-accent, #0f766e); border:1px solid var(--ws-line, #cbd5e1); border-radius:6px; text-decoration:none;">
+            <span>👥</span> <span>CRM &amp; Pipeline</span>
+          </a>
+          <a href="/pilot.html" id="m360-outreach-nav-pilot" class="btn" style="display:inline-flex; align-items:center; gap:6px; padding:7px 13px; font-size:12px; font-weight:600; background:var(--ws-panel, #ffffff); color:var(--ws-text, #334155); border:1px solid var(--ws-line, #cbd5e1); border-radius:6px; text-decoration:none;">
+            <span>🚀</span> <span>Campaign Pilot</span>
+          </a>
+          <a href="/analytics-dashboard.html" id="m360-outreach-nav-analytics" class="btn" style="display:inline-flex; align-items:center; gap:6px; padding:7px 13px; font-size:12px; font-weight:600; background:var(--ws-panel, #ffffff); color:var(--ws-text, #334155); border:1px solid var(--ws-line, #cbd5e1); border-radius:6px; text-decoration:none;">
+            <span>📊</span> <span>Analytics</span>
+          </a>
+        </div>
+      </div>
+
 
 
       <!-- Safety Disclaimer matching Overview #m360-control-context -->
@@ -3564,6 +3592,34 @@
       }
     });
 
+    // Outreach Top Connected Campaigns Navigation
+    $('m360-outreach-nav-linkedin')?.addEventListener('click', () => {
+      const liDraft = activeTask?.channel_draft_versions?.LinkedIn?.versions?.at(-1);
+      window.Matrix360LinkedIn?.open(liDraft ? { text: liDraft.body, title: activeTask?.title, objective: activeTask?.prompt || activeTask?.objective } : {});
+    });
+    $('m360-outreach-nav-crm')?.addEventListener('click', (e) => {
+      if (window.Matrix360Router?.navigateToPage) {
+        e.preventDefault();
+        window.Matrix360Router.navigateToPage('leads');
+      }
+    });
+    try {
+      const wsVal = ws();
+      if (wsVal) {
+        fetch('/api/marketing/whatsapp/status?workspace_id=' + encodeURIComponent(wsVal))
+          .then(r => r.json())
+          .then(data => {
+            if (data && (data.status === 'ready' || data.status === 'verified')) {
+              const waLink = $('m360-outreach-nav-whatsapp');
+              if (waLink) {
+                waLink.href = '/whatsapp-status.html';
+                waLink.innerHTML = '<span>💬</span> <span>WhatsApp (Ready)</span>';
+              }
+            }
+          }).catch(() => {});
+      }
+    } catch (_) {}
+
     // LinkedIn Workspace Launcher
     $('m360-btn-open-linkedin-config')?.addEventListener('click', () => {
       const liDraft = activeTask?.channel_draft_versions?.LinkedIn?.versions?.at(-1);
@@ -3773,19 +3829,13 @@
   let sendingTest=false;
 
   function testBlocker(){
-
+    if(!liveSendingEnabled)return 'Sending is disabled. You can prepare and review drafts.';
     const draft=activeTask?.channel_draft_versions?.Email?.versions?.at(-1);
-
     const recipient=$('m360-email-test-recipient').value.trim();
-
     if(!draft)return 'Prepare an Email draft first.';
-
     if(draft.status!=='approved')return 'Approve Email version '+draft.version+' first.';
-
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(recipient))return 'Enter a valid recipient email address.';
-
     return '';
-
   }
 
 
@@ -4356,39 +4406,37 @@
 
 
   async function loadVerifiedResults(){
-
     const wsId=ws(),taskId=activeTask?.correlation_id;
-
     const status=$('m360-delivery-events'),button=$('m360-refresh-results');
-
+    $('m360-delivery-visual')?.remove();
     if(!taskId){status.textContent='Open a campaign first.';return;}
-
     button.disabled=true;status.textContent='Checking verified provider events…';
-
     try{
-
       const result=await api('/api/marketing/campaigns/'+encodeURIComponent(taskId)+'/results?'+new URLSearchParams({workspace_id:wsId}));
-
       if(wsId!==ws()||taskId!==activeTask?.correlation_id)return;
-
       const labels={delivered:'Delivered',opened:'Opened',unique_opened:'Opened',click:'Clicked',clicked:'Clicked',hard_bounce:'Hard bounce',soft_bounce:'Soft bounce',unsubscribed:'Unsubscribed'};
-
       const events=(result.verified_events||[]).filter(item=>Object.hasOwn(labels,item.event_type)&&Number.isFinite(Date.parse(item.occurred_at)));
-
       if(!events.length){status.textContent='No verified delivery or engagement events found.';return;}
-
       const counts=new Map();
-
       for(const event of events){const label=labels[event.event_type];counts.set(label,(counts.get(label)||0)+1);}
-
-      status.textContent='Recent verified events · '+[...counts].map(([label,count])=>label+' '+count).join(' · ')+'. Latest '+new Date(events[0].occurred_at).toLocaleString()+'.';
-
+      status.textContent='Verified provider events. Counts below represent events, not unique recipients.';
+      const visual=document.createElement('div');visual.id='m360-delivery-visual';
+      const bars=document.createElement('ul');bars.className='m360-delivery-bars';
+      const maximum=Math.max(...counts.values());
+      for(const [label,count] of counts){
+        const row=document.createElement('li'),name=document.createElement('span'),bar=document.createElement('meter'),value=document.createElement('strong');
+        name.textContent=label;bar.min=0;bar.max=maximum;bar.value=count;bar.setAttribute('aria-label',label+' events');value.textContent=String(count);row.append(name,bar,value);bars.append(row);
+      }
+      const title=document.createElement('h4');title.textContent='Latest verified activity';
+      const history=document.createElement('ol');history.className='m360-delivery-history';
+      for(const event of [...events].sort((a,b)=>Date.parse(b.occurred_at)-Date.parse(a.occurred_at)).slice(0,8)){
+        const row=document.createElement('li'),label=document.createElement('strong'),time=document.createElement('time');
+        label.textContent=labels[event.event_type];time.dateTime=event.occurred_at;time.textContent=new Date(event.occurred_at).toLocaleString();row.append(label,time);history.append(row);
+      }
+      visual.append(bars,title,history);status.after(visual);
     }catch(error){
-
       if(wsId===ws()&&taskId===activeTask?.correlation_id)status.textContent='Could not load verified events. Try again.';
-
     }finally{button.disabled=false;}
-
   }
 
 
@@ -4576,7 +4624,17 @@
     }
 
     grid.innerHTML = cells.join('');
-
+    const agenda = $('m360-calendar-agenda'); agenda.replaceChildren();
+    const days = [...byDay.entries()].filter(([key]) => key.startsWith(year + '-' + (month + 1) + '-')).sort((a, b) => Number(a[0].split('-')[2]) - Number(b[0].split('-')[2]));
+    for (const [day, entries] of days) for (const event of entries.sort((a, b) => Date.parse(a.scheduled_for) - Date.parse(b.scheduled_for))) {
+      const item = document.createElement('button'); item.type = 'button'; item.className = 'm360-agenda-item';
+      const title = document.createElement('strong'), detail = document.createElement('span');
+      title.textContent = event.title || event.channel;
+      const time = new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute: '2-digit', timeZone: event.timezone || 'Asia/Kolkata' }).format(new Date(event.scheduled_for));
+      detail.textContent = [day, time, event.channel, String(event.status || 'draft').replaceAll('_', ' '), event.timezone || 'Asia/Kolkata'].join(' · ');
+      item.append(title, detail); item.addEventListener('click', () => { calendarSelectedEventId = event.event_id; calendarSelectedDate = dateInputValue(event.scheduled_for); renderCalendarEditor(); $('m360-calendar-title').focus(); }); agenda.append(item);
+    }
+    if (!agenda.children.length) { const empty = document.createElement('p'); empty.textContent = 'No planned campaigns this month.'; agenda.append(empty); }
     grid.querySelectorAll('[data-calendar-date]').forEach(cell => {
 
       const select = () => { calendarSelectedDate = cell.dataset.calendarDate; calendarSelectedEventId = ''; renderCalendarEditor(); };
